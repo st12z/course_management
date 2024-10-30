@@ -1,4 +1,20 @@
 extends ../../layouts/default.pug
-
+include ../../mixins/box-head.pug
 block main
-  h1 #{pageTitle}
+  +box-head(pageTitle)
+  .container
+    .row
+      each topic in topics
+        .col-4.mb-3
+          .inner-topic
+            <div class="card" style="width: 18rem;">
+              .inner-image
+                img(src=topic.thumbnail)
+              .inner-content
+                <div class="card-body">
+                  <h5 class="card-title">#{topic.title}</h5>
+                  <p class="card-text">!{topic.description}</p>
+                  a(class="btn btn-primary" href=`/courses/${topic.slug}`) Xem chi tiết
+                </div>
+            </div>
+        

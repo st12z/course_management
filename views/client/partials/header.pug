@@ -1,2 +1,33 @@
 header.header
-  p header
+  .container
+    .row
+      .col-3
+        .inner-logo
+          a(href="/") 
+            img(src="https://img.freepik.com/free-vector/flat-design-library-logo-template_23-2149326889.jpg" alit="Logo")
+      .col-4
+        .inner-search
+          form(
+            action="/search/result"
+            method="GET"
+          )
+            div(class="form-group d-flex mb-0")
+              input(
+                type="text"
+                placeHolder="Nhập từ khóa..."
+                class="form-control"
+                name="keyword"
+                value=keyword 
+              )
+              button(
+                type="submit"
+                class="btn btn-primary"
+              ) Tìm
+      .col-5
+        .inner-list
+          ul
+            li
+              a(href="/topics") Chủ đề
+            li
+              a(href="/tym") Yêu thích
+    
