@@ -4,4 +4,53 @@ block main
   +box-head(pageTitle)
   .container
     .row
+      .col-12
+        ul(class="info-course")
+          li
+            b Số lượng người thích : 
+            span #{course.like} 
+            <i class="fa-regular fa-thumbs-up"></i>
+            
+          li
+            b Số lượng người xem: 
+            span #{course.watch} 
+            <i class="fa-solid fa-eye"></i>
+          li
+            b Số lượng người tym: 
+            span #{course.tym} 
+            <i class="fa-regular fa-heart"></i>
+            
+
+    .row
+      .col-6
+        .inner-image.detail-course
+          img(src=course.thumbnail)
+          span(class="badge badge-danger" discount) Giảm giá #{course.discount}%
+        button(class="btn btn-secondary mt-2") Học thử
+      .col-6
+        .inner-content
+          h2 #{course.title}
+          p 
+            span(priceNew) #{course.price_special.toLocaleString()} đ 
+            span(priceOld) #{course.price.toLocaleString()} đ
+          p 
+            b Thời lượng: 
+            span #{course.duration} 
+            <i class="fa-regular fa-clock"></i>
+          p 
+            b Tổng cộng số bài:  
+            span #{course.lecturesCount}
+          p
+            b Số người tham gia: 
+            span #{course.participants} <i class="fa-solid fa-user-group"></i>
+          p
+            b Trạng thái: 
+            if (course.status=="active")
+              span Còn
+            else
+              span Hết
+          button(class="btn btn-success") Thêm vào giỏ hàng <i class="fa-solid fa-cart-shopping"></i>
+          
+            
+
         

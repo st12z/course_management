@@ -32,7 +32,7 @@ export const detail = async (req: Request, res: Response) => {
   course["price_special"] = course["price"] * (1 - course["discount"] / 100);
   console.log(course);
   res.render("client/pages/courses/detail", {
-    pageTitle: "Trang danh sách khóa học",
+    pageTitle: "Trang chi tiết khóa học",
     course: course,
   });
 };
