@@ -93,3 +93,26 @@ a{
   list-style: none;
   margin-right: 20px;
 }
+[button-like]{
+  font-size: 30px;
+  margin-right: 40px;
+}
+[button-tym]{
+  font-size:30px;
+}
+[button-like].active{
+  font-weight: 600;
+  color:blue;
+}
+[button-tym].active{
+  font-weight: 600;
+  color:red;
+}
+[show-tym]{
+  font-weight: 600;
+  color:red;
+}
+[show-like]{
+  font-weight: 600;
+  color:blue;
+}

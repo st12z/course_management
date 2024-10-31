@@ -8,17 +8,17 @@ block main
         ul(class="info-course")
           li
             b Số lượng người thích : 
-            span #{course.like} 
-            <i class="fa-regular fa-thumbs-up"></i>
+            span #{course.like.toLocaleString()} 
+            <i class="fa-regular fa-thumbs-up" show-like></i>
             
           li
             b Số lượng người xem: 
-            span #{course.watch} 
+            span #{course.watch.toLocaleString()} 
             <i class="fa-solid fa-eye"></i>
           li
             b Số lượng người tym: 
-            span #{course.tym} 
-            <i class="fa-regular fa-heart"></i>
+            span #{course.tym.toLocaleString()} 
+            <i class="fa-regular fa-heart" show-tym></i>
             
 
     .row
@@ -42,14 +42,50 @@ block main
             span #{course.lecturesCount}
           p
             b Số người tham gia: 
-            span #{course.participants} <i class="fa-solid fa-user-group"></i>
+            span #{course.participants} <i class="fa-solid fa-user-group" ></i>
           p
             b Trạng thái: 
             if (course.status=="active")
               span Còn
             else
               span Hết
+          p
+            i(class="fa-regular fa-thumbs-up" button-like=course.id)
+            i(class="fa-regular fa-heart" button-tym=course.id)
           button(class="btn btn-success") Thêm vào giỏ hàng <i class="fa-solid fa-cart-shopping"></i>
+    .row.mt-5
+      .col-12
+        <div class="card">
+          <div class="card-header" >
+            h5(style="color:green") Mô tả khóa học
+          </div>
+          <div class="card-body">
+            <p class="card-text">#{course.description}</p>
+          </div>
+        </div>
+      .col-12.mt-5
+        <div class="card">
+          <div class="card-header">
+            h5(style="color:green") Lộ trình khóa học
+          </div>
+          <div class="card-body">
+            <div class="accordion" id="accordionExample">
+              each lecture,index in lectures
+                <div class="card-header" id="heading#{lecture.id}">
+                  <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse#{lecture.id}">
+                      Collapsible(style="color:#00ADEF;font-weight:600") Bài #{index+1}: #{lecture.title}
+                    </button>
+                  </h2>
+                </div>
+                each subLesson in lecture.subLessons
+                  <div id="collapse#{lecture.id}" class="collapse show ml-5">
+                    <p>- #{subLesson}</p>
+                  </div>
+            </div>
+          </div>
+        </div>
+  
           
             
 
