@@ -8,17 +8,17 @@ block main
         ul(class="info-course")
           li
             b Số lượng người thích : 
-            span #{course.like.toLocaleString()} 
-            <i class="fa-regular fa-thumbs-up" show-like></i>
+            span(amount-like) #{course.like.toLocaleString()} thích 
+            i(class="fa-regular fa-thumbs-up" show-like)
             
           li
             b Số lượng người xem: 
-            span #{course.watch.toLocaleString()} 
+            span(amount-view) #{course.watch.toLocaleString()} xem 
             <i class="fa-solid fa-eye"></i>
           li
             b Số lượng người tym: 
-            span #{course.tym.toLocaleString()} 
-            <i class="fa-regular fa-heart" show-tym></i>
+            span(amount-tym) #{course.tym.toLocaleString()} yêu thích 
+            i(class="fa-regular fa-heart" show-tym)
             
 
     .row
@@ -50,8 +50,8 @@ block main
             else
               span Hết
           p
-            i(class="fa-regular fa-thumbs-up" button-like=course.id)
-            i(class="fa-regular fa-heart" button-tym=course.id)
+            i(class="fa-regular fa-thumbs-up" button-like=course.slug)
+            i(class="fa-regular fa-heart" button-tym=course.slug)
           button(class="btn btn-success") Thêm vào giỏ hàng <i class="fa-solid fa-cart-shopping"></i>
     .row.mt-5
       .col-12
