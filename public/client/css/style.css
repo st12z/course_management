@@ -31,7 +31,7 @@ a{
   list-style: none;
   margin-left:10px ;
 }
-.card{
+[detail-card]{
   border-radius: 5px;
   height: 500px;
 }
@@ -115,4 +115,21 @@ a{
 [show-like]{
   font-weight: 600;
   color:blue;
+}
+.inner-card{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  width: auto;
+}
+[alert-cart].hidden{
+  display: none;
+}
+[alert-cart]{
+  display:inline;
+  position: fixed;
+  z-index: 999;
+  right: 50px;
+  top:200px;
 }

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import Course from "../../models/course.model";
 import Topic from "../../models/topic.model";
 import Lecture from "../../models/lecture.model";
+import FavoriteCourse from "../../models/favorite-course.model";
 export const index = async (req: Request, res: Response) => {
   const slugTopic = req.params.slugTopic;
   const topic = await Topic.findOne({
@@ -80,6 +81,11 @@ export const tym = async (req: Request, res: Response) => {
     status: "active",
   });
   await Course.updateOne({ slug: slugCourse }, { tym:course.tym+1 });
+  const dataFavorite={
+    courseId:course["id"]
+  }
+  const favoriteSong=new FavoriteCourse(dataFavorite);
+  favoriteSong.save();
   res.json({
     code:200,
     messages:"Cập nhật thành công",

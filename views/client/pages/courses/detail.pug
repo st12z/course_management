@@ -3,6 +3,7 @@ include ../../mixins/box-head.pug
 block main
   +box-head(pageTitle)
   .container
+    div(class="alert alert-danger hidden" alert-cart) Bạn đã đặt hàng thành công!
     .row
       .col-12
         ul(class="info-course")
@@ -52,7 +53,7 @@ block main
           p
             i(class="fa-regular fa-thumbs-up" button-like=course.slug)
             i(class="fa-regular fa-heart" button-tym=course.slug)
-          button(class="btn btn-success") Thêm vào giỏ hàng <i class="fa-solid fa-cart-shopping"></i>
+          button(class="btn btn-success" button-cart=course.id) Thêm vào giỏ hàng <i class="fa-solid fa-cart-shopping"></i>
     .row.mt-5
       .col-12
         <div class="card">
