@@ -7,4 +7,5 @@ router.post("/like/:slugCourse",controller.like);
 router.post("/unlike/:slugCourse",controller.unlike);
 router.post("/tym/:slugCourse",controller.tym);
 router.post("/untym/:slugCourse",controller.untym);
+router.post("/feedback/:slugCourse",controller.feedBackPost);
 export const courseRoutes: Router = router;

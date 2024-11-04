@@ -6,11 +6,11 @@ block main
 
     div(id="rating" rating=course.rating)
       span(review-star) #{course.rating}.0
-      <span star class="fa fa-star" data-value="1" ></span>
-      <span star class="fa fa-star" data-value="2" ></span>
-      <span star class="fa fa-star" data-value="3" ></span>
-      <span star class="fa fa-star" data-value="4" ></span>
-      <span star class="fa fa-star" data-value="5" ></span> 
+      <span feed-star class="fa fa-star" data-value="1" ></span>
+      <span feed-star class="fa fa-star" data-value="2" ></span>
+      <span feed-star class="fa fa-star" data-value="3" ></span>
+      <span feed-star class="fa fa-star" data-value="4" ></span>
+      <span feed-star class="fa fa-star" data-value="5" ></span> 
     div(class="alert alert-danger hidden" alert-cart) Bạn đã đặt hàng thành công!
     .row
       .col-12
@@ -96,16 +96,48 @@ block main
         </div>
     .row.mt-3   
       .col-12
-        h3 Đánh giá của học viên
         div(class="form-rating")
-          form(form-search)
-            .inner-rating
-              p <b>1.Đánh giá của bạn về khóa học</b>
-              <span reviewing-star star class="fa fa-star" data-value="1" ></span>
-              <span reviewing-star star class="fa fa-star" data-value="2" ></span>
-              <span reviewing-star star class="fa fa-star" data-value="3" ></span>
-              <span reviewing-star star class="fa fa-star" data-value="4" ></span>
-              <span reviewing-star star class="fa fa-star" data-value="5" ></span> 
+          h3 Đánh giá của học viên
+          form(form-review)
+            .inner-review
+              .inner-rating.form-group
+                p 
+                  <b>1.Đánh giá của bạn về khóa học</b>
+                <span reviewing-star  class="fa fa-star" data-value="1" ></span>
+                <span reviewing-star  class="fa fa-star" data-value="2" ></span>
+                <span reviewing-star  class="fa fa-star" data-value="3" ></span>
+                <span reviewing-star  class="fa fa-star" data-value="4" ></span>
+                <span reviewing-star  class="fa fa-star" data-value="5" ></span> 
+                input(
+                  name="rating"
+                  hidden
+                  rating
+                )
+              .inner-content.form-group
+                p <b>2.Cảm nhận của ban về khóa học</b>
+                textarea(
+                  class="form-control"
+                  name="description"
+                )
+              button(class="btn btn-primary" type="submit") Đánh giá
+        .col-12.mt-3.inner-feed
+          if(feedbacks && feedbacks.length>0)
+            each feedback in feedbacks
+              div(class="person-review")
+                div(class="inner-info")
+                  div(class="inner-avatar")
+                    img(review-avatar src="/client/images/avatar.jpg" width="50px")
+                  div(class="inner-name")
+                    p Thực
+                    p 6 ngày trước 
+                div(class="inner-rating" reviewed-rating=feedback.rating)
+                  <span reviewed-star class="fa fa-star" data-value="1" ></span>
+                  <span reviewed-star class="fa fa-star" data-value="2" ></span>
+                  <span reviewed-star class="fa fa-star" data-value="3" ></span>
+                  <span reviewed-star class="fa fa-star" data-value="4" ></span>
+                  <span reviewed-star class="fa fa-star" data-value="5" ></span> 
+                div(class="inner-content")
+                  p #{feedback.review}
 
 
 
