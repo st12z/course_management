@@ -1,5 +1,3 @@
-
-
 const amountLike = document.querySelector("[amount-like]");
 const amountTym = document.querySelector("[amount-tym]");
 const fetchApiPOST = (slug, api, type) => {
@@ -30,7 +28,6 @@ const fetchApiPOST = (slug, api, type) => {
 // button-like
 const buttonLike = document.querySelector("[button-like]");
 
-console.log(buttonLike);
 if (buttonLike) {
   buttonLike.addEventListener("click", () => {
     buttonLike.classList.toggle("active");
@@ -50,7 +47,6 @@ if (buttonLike) {
 // button-tym
 const buttonTym = document.querySelector("[button-tym]");
 
-console.log(buttonTym);
 if (buttonTym) {
   buttonTym.addEventListener("click", () => {
     buttonTym.classList.toggle("active");
@@ -66,26 +62,26 @@ if (buttonTym) {
 }
 // end button-tym
 
-
 //buton-cart
 let cart = localStorage.getItem("cart");
 if (!cart) {
-  cart = JSON.stringify([]);
+  localStorage.setItem("cart", JSON.stringify([]));
 }
-localStorage.setItem("cart", cart);
+
 // show quantityCart
-const spanQuantityCart=document.querySelector("[quantity-cart]");
-const showQuantityCart=(cart)=>{
-  const quantityCart=cart.reduce((sum,item)=>sum+=item.quantity,0);
-  if(spanQuantityCart){
-    spanQuantityCart.innerHTML=`(${quantityCart})`;
+const spanQuantityCart = document.querySelector("[quantity-cart]");
+const showQuantityCart = () => {
+  const cart = JSON.parse(localStorage.getItem("cart"));
+  const quantityCart = cart.reduce((sum, item) => (sum += item.quantity), 0);
+  if (spanQuantityCart) {
+    spanQuantityCart.innerHTML = `(${quantityCart})`;
   }
-}
-showQuantityCart(JSON.parse(cart));
+};
+showQuantityCart();
 // end show quantityCart
 const buttonCart = document.querySelector("[button-cart]");
-const alertCart=document.querySelector("[alert-cart]");
-console.log(alertCart);
+const alertCart = document.querySelector("[alert-cart]");
+
 if (buttonCart) {
   buttonCart.addEventListener("click", () => {
     const courseId = buttonCart.getAttribute("button-cart");
@@ -99,20 +95,47 @@ if (buttonCart) {
         quantity: 1,
       });
     }
-    showQuantityCart(cart);
-    localStorage.setItem("cart",JSON.stringify(cart));
+    localStorage.setItem("cart", JSON.stringify(cart));
+    showQuantityCart();
     alertCart.classList.remove("hidden");
-    setTimeout(()=>{
+    setTimeout(() => {
       alertCart.classList.add("hidden");
-    },3000);
+    }, 3000);
   });
 }
 //end button-cart
 
-// fetchApiCart
-const fetchApiCart=(api)=>{
-  fetch(api,{
-    method:"GET",
+// review star event
+
+const stars = document.querySelectorAll("[star]");
+const updateStars = (value) => {
+  stars.forEach(star => {
+    const starValue = parseInt(star.getAttribute('data-value'));
+    if (starValue <= value) {
+      star.classList.add('checked');
+    } else {
+      star.classList.remove('checked');
+    }
+  });
+};
+
+// rating star
+const ratingStar=document.querySelector("#rating");
+console.log(ratingStar);
+if(ratingStar){
+  const rating=ratingStar.getAttribute("rating");
+  updateStars(parseInt(rating))
+}
+// rating star
+
+// review-star
+const reviewStar=document.querySelectorAll("[reviewing-star]");
+if(reviewStar){
+  reviewStar.forEach(star=>{
+    star.addEventListener("click",()=>{
+      const value=star.getAttribute("data-value");
+      updateStars(value);
+    })
   })
 }
-// end fetchApiCart
+// end review-star

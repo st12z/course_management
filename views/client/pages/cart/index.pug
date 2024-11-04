@@ -1,0 +1,26 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+block main
+  +box-head(pageTitle)
+  .container
+    .row
+      .col-12
+        table(class="table table-hover" table-cart)
+          thead
+            th STT
+            th Tên khóa học
+            th Ảnh
+            th Giá
+            th Giảm giá
+            th Giá mới
+            th Số lượng
+            th Tổng tiền 
+            th Hoạt động
+          tbody
+      .col-12.text-right
+        h3(total-payment style="color:red")      
+block script
+  script(src="/client/js/cart.js")
+              
+
+        

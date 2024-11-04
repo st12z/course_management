@@ -3,6 +3,14 @@ include ../../mixins/box-head.pug
 block main
   +box-head(pageTitle)
   .container
+
+    div(id="rating" rating=course.rating)
+      span(review-star) #{course.rating}.0
+      <span star class="fa fa-star" data-value="1" ></span>
+      <span star class="fa fa-star" data-value="2" ></span>
+      <span star class="fa fa-star" data-value="3" ></span>
+      <span star class="fa fa-star" data-value="4" ></span>
+      <span star class="fa fa-star" data-value="5" ></span> 
     div(class="alert alert-danger hidden" alert-cart) Bạn đã đặt hàng thành công!
     .row
       .col-12
@@ -11,7 +19,7 @@ block main
             b Số lượng người thích : 
             span(amount-like) #{course.like.toLocaleString()} thích 
             i(class="fa-regular fa-thumbs-up" show-like)
-            
+
           li
             b Số lượng người xem: 
             span(amount-view) #{course.watch.toLocaleString()} xem 
@@ -20,14 +28,14 @@ block main
             b Số lượng người tym: 
             span(amount-tym) #{course.tym.toLocaleString()} yêu thích 
             i(class="fa-regular fa-heart" show-tym)
-            
+
 
     .row
       .col-6
         .inner-image.detail-course
           img(src=course.thumbnail)
           span(class="badge badge-danger" discount) Giảm giá #{course.discount}%
-        button(class="btn btn-secondary mt-2") Học thử
+        a(href=`/try/${course.slug}` class="btn btn-secondary" target="_blank") Học thử
       .col-6
         .inner-content
           h2 #{course.title}
@@ -86,8 +94,20 @@ block main
             </div>
           </div>
         </div>
-  
-          
-            
+    .row.mt-3   
+      .col-12
+        h3 Đánh giá của học viên
+        div(class="form-rating")
+          form(form-search)
+            .inner-rating
+              p <b>1.Đánh giá của bạn về khóa học</b>
+              <span reviewing-star star class="fa fa-star" data-value="1" ></span>
+              <span reviewing-star star class="fa fa-star" data-value="2" ></span>
+              <span reviewing-star star class="fa fa-star" data-value="3" ></span>
+              <span reviewing-star star class="fa fa-star" data-value="4" ></span>
+              <span reviewing-star star class="fa fa-star" data-value="5" ></span> 
 
-        
+
+
+
+

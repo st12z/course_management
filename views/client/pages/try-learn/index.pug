@@ -1,0 +1,99 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+block main
+  +box-head(pageTitle)
+  .container
+    div(class="alert alert-danger hidden" alert-cart) Bạn thêm vào giỏ hàng thành công!
+    .row
+      .col-12
+        ul(class="info-course")
+          li
+            b Số lượng người thích : 
+            span(amount-like) #{course.like.toLocaleString()} thích 
+            i(class="fa-regular fa-thumbs-up" show-like)
+            
+          li
+            b Số lượng người xem: 
+            span(amount-view) #{course.watch.toLocaleString()} xem 
+            <i class="fa-solid fa-eye"></i>
+          li
+            b Số lượng người tym: 
+            span(amount-tym) #{course.tym.toLocaleString()} yêu thích 
+            i(class="fa-regular fa-heart" show-tym)
+            
+
+    .row
+      .col-12.align-items-center.d-flex.justify-content-center
+        <div class="card" style="width: 25rem;" card-try>
+          .inner-video
+            <div class="video-container">
+              iframe(
+                width="100%" 
+                height="315" 
+                src="https://www.youtube.com/embed/R6plN3FvzFY" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowfullscreen)
+            </div>
+          .inner-content
+          <div class="card-body">
+            h2 #{course.title}
+            p 
+              span(priceNew) #{course.price_special.toLocaleString()} đ 
+              span(priceOld) #{course.price.toLocaleString()} đ
+            p 
+              b Thời lượng: 
+              span #{course.duration} 
+              <i class="fa-regular fa-clock"></i>
+            p 
+              b Tổng cộng số bài:  
+              span #{course.lecturesCount}
+            p
+              b Số người tham gia: 
+              span #{course.participants} <i class="fa-solid fa-user-group" ></i>
+            p
+              b Trạng thái: 
+              if (course.status=="active")
+                span Còn
+              else
+                span Hết/a>
+            button(class="btn btn-success" button-cart=course.id) Thêm vào giỏ hàng <i class="fa-solid fa-cart-shopping"></i>
+          </div>
+        </div>  
+    .row.mt-5
+      .col-12
+        <div class="card">
+          <div class="card-header" >
+            h5(style="color:green") Mô tả khóa học
+          </div>
+          <div class="card-body">
+            <p class="card-text">#{course.description}</p>
+          </div>
+        </div>
+      .col-12.mt-5
+        <div class="card">
+          <div class="card-header">
+            h5(style="color:green") Lộ trình khóa học
+          </div>
+          <div class="card-body">
+            <div class="accordion" id="accordionExample">
+              each lecture,index in lectures
+                <div class="card-header" id="heading#{lecture.id}">
+                  <h2 class="mb-0">
+                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse#{lecture.id}">
+                      Collapsible(style="color:#00ADEF;font-weight:600") Bài #{index+1}: #{lecture.title}
+                    </button>
+                  </h2>
+                </div>
+                each subLesson in lecture.subLessons
+                  <div id="collapse#{lecture.id}" class="collapse show ml-5">
+                    <p>- #{subLesson}</p>
+                  </div>
+            </div>
+          </div>
+        </div>
+  
+          
+            
+
+        

@@ -28,7 +28,8 @@ const courseSchema = new mongoose.Schema(
     tym:Number,
     like:Number,
     watch:Number,
-    topicId:String
+    topicId:String,
+    rating:Number,
   },
   {
     timestamps: true,

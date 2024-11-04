@@ -133,3 +133,80 @@ a{
   right: 50px;
   top:200px;
 }
+[card-try]{
+  padding: 10px;
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+}
+[card-try].inner-video{
+  padding: 10px;
+  border-radius: 10px;
+}
+[card-try] {
+  border: 1px solid #ccc; /* Đường viền nhẹ */
+  border-radius: 8px; /* Bo góc cho thẻ card */
+  overflow: hidden; /* Ẩn phần nội dung vượt ra ngoài bo góc */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ cho thẻ */
+  transition: transform 0.2s; /* Hiệu ứng khi hover */
+}
+
+[card-try]:hover {
+  transform: scale(1.02); /* Phóng to một chút khi hover */
+}
+
+.video-container {
+  margin-bottom: 1rem; /* Khoảng cách giữa video và nội dung bên dưới */
+}
+
+[card-try].card-body {
+  padding: 1.25rem; /* Khoảng cách cho nội dung bên trong */
+  background-color: #f9f9f9; /* Màu nền cho nội dung */
+}
+
+[card-try].card-body h2 {
+  font-size: 1.5rem; /* Kích thước tiêu đề */
+  margin-bottom: 0.5rem; /* Khoảng cách dưới tiêu đề */
+}
+
+[card-try].card-body p {
+  margin: 0.5rem 0; /* Khoảng cách giữa các đoạn văn */
+}
+
+[card-try].card-body span {
+  font-weight: bold; /* Đậm các giá trị trong span */
+}
+
+[card-try].priceNew {
+  color: green; /* Màu cho giá mới */
+}
+
+[card-try].priceOld {
+  color: red; /* Màu cho giá cũ */
+  text-decoration: line-through; /* Gạch ngang cho giá cũ */
+}
+.checked{
+  color:orange;
+}
+#rating{
+  margin-left:40px;
+  padding:10px;
+}
+[star]:hover{
+  cursor: pointer;
+}
+[disabled] {
+  pointer-events: none; 
+  cursor: not-allowed; 
+  color: #ccc; 
+}
+[review-star]{
+  font-weight: 600;
+  font-size: 15px;
+  margin-right: 5px;
+}
+[reviewing-star]:hover{
+  cursor: pointer;
+}
