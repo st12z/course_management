@@ -8,7 +8,8 @@ const feedBackSchema = new mongoose.Schema(
    like:{
     default:0,
     type:Number,
-   }
+   },
+   reply:[]
   },
   {
     timestamps: true,

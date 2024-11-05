@@ -40,8 +40,9 @@ export const detail = async (req: Request, res: Response) => {
     lectures.push(lecture);
   }
   course["price_special"] = course["price"] * (1 - course["discount"] / 100);
-  const feedbacks = await FeedBack.find().sort({ createdAt: -1 });
-  console.log(feedbacks);
+  const feedbacks = await FeedBack.find({ courseId: course.id }).sort({
+    createdAt: -1,
+  });
   res.render("client/pages/courses/detail", {
     pageTitle: "Trang chi tiết khóa học",
     course: course,
@@ -138,37 +139,109 @@ export const feedBackPost = async (req: Request, res: Response) => {
     courseId: courseId,
   });
   await feedBack.save();
+  const feedBacks = await FeedBack.find({
+    courseId: course.id,
+  });
+  const sumRating = feedBacks.reduce((sum, item) => sum + item.rating, 0);
+  const countFeedBack = feedBacks.length;
+  const ratingAvg = Math.round(sumRating / countFeedBack);
+  await Course.updateOne(
+    { slug: req.params.slugCourse },
+    { rating: ratingAvg }
+  );
   res.json({
     code: 200,
     messages: "Gửi data lên server thành công",
     review: review,
     rating: rating,
     id: feedBack.id,
+    ratingAverage: ratingAvg,
   });
 };
 export const likeFeed = async (req: Request, res: Response) => {
-  const feedBackId=req.body.id;
-  const feedBack=await FeedBack.findOne({
-    _id:feedBackId
+  const feedBackId = req.body.id;
+  const feedBack = await FeedBack.findOne({
+    _id: feedBackId,
   });
-  await FeedBack.updateOne({_id:feedBackId},{like:feedBack.like+1});
+  await FeedBack.updateOne({ _id: feedBackId }, { like: feedBack.like + 1 });
   res.json({
     code: 200,
     messages: "Gửi data lên server thành công",
-    feedBackId:feedBackId,
-    like:feedBack.like+1
+    feedBackId: feedBackId,
+    like: feedBack.like + 1,
   });
 };
 export const unlikeFeed = async (req: Request, res: Response) => {
-  const feedBackId=req.body.id;
-  const feedBack=await FeedBack.findOne({
-    _id:feedBackId
+  const feedBackId = req.body.id;
+  const feedBack = await FeedBack.findOne({
+    _id: feedBackId,
   });
-  await FeedBack.updateOne({_id:feedBackId},{like:feedBack.like-1});
+  await FeedBack.updateOne({ _id: feedBackId }, { like: feedBack.like - 1 });
   res.json({
     code: 200,
     messages: "Gửi data lên server thành công",
-    feedBackId:feedBackId,
-    like:feedBack.like-1
+    feedBackId: feedBackId,
+    like: feedBack.like - 1,
+  });
+};
+export const deleteFeed = async (req: Request, res: Response) => {
+  const feedBackId = req.params.id;
+  const feedBack = await FeedBack.findOne({
+    _id: feedBackId,
+  });
+  const courseId = feedBack.courseId;
+  await FeedBack.deleteOne({ _id: feedBackId });
+  const feedBacks = await FeedBack.find({
+    courseId: courseId,
+  });
+  let ratingAverage = 0;
+  if (feedBacks && feedBacks.length > 0) {
+    const sumRating = feedBacks.reduce((sum, item) => sum + item.rating, 0);
+    const countFeedBack = feedBacks.length;
+    ratingAverage = Math.round(sumRating / countFeedBack);
+  }
+  await Course.updateOne({ _id: courseId }, { rating: ratingAverage });
+  res.json({
+    code: 200,
+    messages: "Xóa thành công!",
+    feedBackId: feedBackId,
+    ratingAverage: ratingAverage,
+  });
+};
+export const editFeed = async (req: Request, res: Response) => {
+  const feedBackId = req.params.id;
+  const rating = parseInt(req.body.rating);
+  const review = req.body.review;
+  console.log(rating, review);
+  await FeedBack.updateOne(
+    {
+      _id: feedBackId,
+    },
+    {
+      rating: rating,
+      review: review,
+    }
+  );
+  const feedBack = await FeedBack.findOne({
+    _id: feedBackId,
+  });
+  const courseId = feedBack.courseId;
+  const feedBacks = await FeedBack.find({
+    courseId: courseId,
+  });
+  let ratingAverage = 0;
+  if (feedBacks && feedBacks.length > 0) {
+    const sumRating = feedBacks.reduce((sum, item) => sum + item.rating, 0);
+    const countFeedBack = feedBacks.length;
+    ratingAverage = Math.round(sumRating / countFeedBack);
+  }
+  await Course.updateOne({ _id: courseId }, { rating: ratingAverage });
+  res.json({
+    code: 200,
+    messages: "Cập nhật thành công!",
+    rating: rating,
+    review: review,
+    feedBackId: feedBackId,
+    ratingAverage: ratingAverage,
   });
 };

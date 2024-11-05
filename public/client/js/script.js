@@ -29,12 +29,12 @@ const fetchApiPOST = (slug, api, type) => {
 };
 // button-like
 const buttonLike = document.querySelector("[button-like]");
-const slugCourse = buttonLike.getAttribute("button-like");
+let slugCourse = "";
 if (buttonLike) {
+  slugCourse = buttonLike.getAttribute("button-like");
   buttonLike.addEventListener("click", () => {
     buttonLike.classList.toggle("active");
     let api = "";
-    const slugCourse = buttonLike.getAttribute("button-like");
     if (buttonLike.classList.contains("active")) {
       api = `http://localhost:3000/courses/like/${slugCourse}`;
     } else {
@@ -53,7 +53,6 @@ if (buttonTym) {
   buttonTym.addEventListener("click", () => {
     buttonTym.classList.toggle("active");
     let api = "";
-    const slugCourse = buttonTym.getAttribute("button-tym");
     if (buttonTym.classList.contains("active")) {
       api = `http://localhost:3000/courses/tym/${slugCourse}/`;
     } else {
@@ -107,11 +106,9 @@ if (buttonCart) {
 }
 //end button-cart
 
-// review star event
-
-const feedStars = document.querySelectorAll("[feed-star]");
-const updatefeedStars = (value) => {
-  feedStars.forEach((star) => {
+// checked-star
+const updateStar = (value, stars) => {
+  stars.forEach((star) => {
     const starValue = parseInt(star.getAttribute("data-value"));
     if (starValue <= value) {
       star.classList.add("checked");
@@ -120,56 +117,51 @@ const updatefeedStars = (value) => {
     }
   });
 };
+// end checked-star
 
 // rating star course
 const ratingStar = document.querySelector("#rating");
-console.log(ratingStar);
 if (ratingStar) {
+  const feedStars = document.querySelectorAll("[feed-star]");
   const rating = ratingStar.getAttribute("rating");
-  updatefeedStars(parseInt(rating));
+  updateStar(parseInt(rating), feedStars);
 }
 // rating star course
 
 //rating star oneperson
-const reviewedRatings = document.querySelectorAll("[reviewed-rating]");
-if (reviewedRatings) {
-  reviewedRatings.forEach((reviewedRating) => {
-    const rating = reviewedRating.getAttribute("reviewed-rating");
-    const reviewedStars = reviewedRating.querySelectorAll("[reviewed-star]");
-    reviewedStars.forEach((reviewedStar) => {
-      const data = reviewedStar.getAttribute("data-value");
-      if (data <= rating) {
-        reviewedStar.classList.add("checked");
-      } else {
-        reviewedStar.classList.remove("checked");
-      }
+const reviewedStar = () => {
+  const reviewedRatings = document.querySelectorAll("[reviewed-rating]");
+  if (reviewedRatings) {
+    reviewedRatings.forEach((reviewedRating) => {
+      const rating = reviewedRating.getAttribute("reviewed-rating");
+      const reviewedStars = reviewedRating.querySelectorAll("[reviewed-star]");
+      reviewedStars.forEach((reviewedStar) => {
+        const data = reviewedStar.getAttribute("data-value");
+        if (data <= rating) {
+          reviewedStar.classList.add("checked");
+        } else {
+          reviewedStar.classList.remove("checked");
+        }
+      });
     });
-  });
-}
-//rating star oneperson
-// review-star
-const reviewStars = document.querySelectorAll("[reviewing-star]");
-const updateReviewStars = (value) => {
-  reviewStars.forEach((star) => {
-    const starValue = parseInt(star.getAttribute("data-value"));
-    if (starValue <= value) {
-      star.classList.add("checked");
-    } else {
-      star.classList.remove("checked");
-    }
-  });
+  }
 };
+reviewedStar();
+//rating star oneperson
+
+// reviewing-star
 const inputRating = document.querySelector("input[rating]");
+const reviewStars = document.querySelectorAll("[reviewing-star]");
 if (reviewStars) {
   reviewStars.forEach((star) => {
     star.addEventListener("click", () => {
       const value = star.getAttribute("data-value");
       inputRating.value = value;
-      updateReviewStars(value);
+      updateStar(value, reviewStars);
     });
   });
 }
-// end review-star
+// end reviewing-star
 
 // form-rating and insert feed back
 const formReview = document.querySelector("[form-review]");
@@ -196,7 +188,7 @@ if (formReview) {
         console.log(data);
         const nodeFirst = allFeedBack.querySelector(".person-review");
         div.classList.add("person-review");
-        for (let i = 1; i <= data.rating; i++) {}
+        div.setAttribute("person-review", data.id);
         div.innerHTML = `
           <div class="inner-info">
             <div class="inner-avatar">
@@ -215,97 +207,235 @@ if (formReview) {
             <span reviewed-star class="fa fa-star" data-value="5" ></span> 
           </div>
           <div class="inner-content">
-            <p>${data.review}</p>
+            <p reviewed-content>${data.review}</p>
           </div>
-          <div class="inner-action">
+          <div class="inner-action" feedback="${data.id}">
             <i class="fa-regular fa-thumbs-up mr-2" review-like="${data.id}"></i>
             <i class="fa-solid fa-pen-to-square mr-2" review-edit="${data.id}"></i>
-            <i class="fa-solid fa-reply mr-2" review-reply="${data.id}"></i>
             <i class="fa-regular fa-trash-can" review-delete="${data.id}"></i>
           </div>
+          <div class="inner-edit" inner-edit="${data.id}">
+            <form form-edit-review>
+              <div class="inner-review">
+                <div class="inner-rating.form-group">
+                  <p> 
+                    <b>1.Đánh giá của bạn về khóa học</b>
+                  </p>
+                  <span edit-star  class="fa fa-star" data-value="1" ></span>
+                  <span edit-star  class="fa fa-star" data-value="2" ></span>
+                  <span edit-star  class="fa fa-star" data-value="3" ></span>
+                  <span edit-star  class="fa fa-star" data-value="4" ></span>
+                  <span edit-star  class="fa fa-star" data-value="5" ></span> 
+                  <input
+                    name="rating"
+                    hidden
+                    edit-rating
+                  />
+                </div>
+                <div class="inner-content.form-group">
+                  <p> <b>2.Cảm nhận của ban về khóa học</b></p>
+                  <textarea
+                    class="form-control"
+                    name="description"
+                  >${data.review}</textarea>
+                </div>
+                <button class="btn btn-primary mb-3" type="submit"> Cập nhật</div>
+              </div>  
+            </form>
+          </div>
         `;
-        const reviewedStars = div.querySelectorAll("[reviewed-star]");
-        reviewedStars.forEach((reviewedStar) => {
-          const data = reviewedStar.getAttribute("data-value");
-          if (data <= rating) {
-            reviewedStar.classList.add("checked");
-          } else {
-            reviewedStar.classList.remove("checked");
-          }
-        });
         allFeedBack.insertBefore(div, nodeFirst);
+        const divRating = document.querySelector("#rating");
+        divRating.setAttribute("rating",data.ratingAverage);
+        const feedStars = divRating.querySelectorAll("[feed-star]");
+        const spanReview = divRating.querySelector("span");
+        const reviewingStars=formReview.querySelectorAll("[reviewing-star]");
+        spanReview.innerHTML = `${data.ratingAverage}.0`;
+        updateStar(data.ratingAverage, feedStars);
+        updateStar(0,reviewingStars);
+        reviewedStar();
+        actionReview();
       });
   });
 }
 // end form-rating andinsert feed back
+// actionReview
+const actionReview = () => {
+  // review-like
 
-// review-like
-
-const fetchApiReviewLike = (api, id, reviewLike, type) => {
-  fetch(api, {
-    method: "POST",
-    headers: {
-      "Content-type": "application/json",
-    },
-    body: JSON.stringify({
-      id: id,
-    }),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      const innerAction = document.querySelector(
-        `[feedback="${data.feedBackId}"]`
-      );
-      console.log(data);
-      if ((type == "like")) {
-        let spanLike=innerAction.querySelector("[span-review-like]");
-        if (!spanLike) {
-          spanLike = document.createElement("span");
-          spanLike.classList.add("mr-2");
-          spanLike.setAttribute("span-review-like","")
-          spanLike.innerHTML = `${data.like} lượt thích`;
-          innerAction.insertBefore(spanLike, reviewLike);
-          
+  const fetchApiReviewLike = (api, id, reviewLike, type) => {
+    fetch(api, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        id: id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.code == 200) {
+          const innerAction = document.querySelector(
+            `[feedback="${data.feedBackId}"]`
+          );
+          console.log(innerAction);
+          if (type == "like") {
+            let spanLike = innerAction.querySelector("[span-review-like]");
+            if (!spanLike) {
+              spanLike = document.createElement("span");
+              spanLike.classList.add("mr-2");
+              spanLike.setAttribute("span-review-like", "");
+              spanLike.innerHTML = `${data.like} lượt thích`;
+              innerAction.insertBefore(spanLike, reviewLike);
+            } else {
+              spanLike.innerHTML = `${data.like} lượt thích`;
+            }
+          } else {
+            const spanLike = innerAction.querySelector("[span-review-like]");
+            if (data.like == 0) {
+              innerAction.removeChild(spanLike);
+            } else {
+              spanLike.innerHTML = `${data.like} lượt thích`;
+            }
+          }
         }
-        else{
-          spanLike.innerHTML=`${data.like} lượt thích`;
+      });
+  };
+  const reviewLikes = document.querySelectorAll("[review-like]");
+  if (reviewLikes) {
+    reviewLikes.forEach((reviewLike) => {
+      reviewLike.addEventListener("click", () => {
+        const feedBackId = reviewLike.getAttribute("review-like");
+        reviewLike.classList.toggle("active-like");
+        let api = "";
+        let type = "";
+        if (reviewLike.classList.contains("active-like")) {
+          api = `http://localhost:3000/courses/feedback/like/${feedBackId}`;
+          type = "like";
+        } else {
+          api = `http://localhost:3000/courses/feedback/unlike/${feedBackId}`;
+          type = "unlike";
         }
-      }
-      else{
-        const spanLike=innerAction.querySelector("[span-review-like]");
-        if(data.like==0){
-          innerAction.removeChild(spanLike);
-        }
-        else{
-          spanLike.innerHTML=`${data.like} lượt thích`;
-        }
-      }
+        fetchApiReviewLike(api, feedBackId, reviewLike, type);
+      });
     });
+  }
+  // end review-like
+
+  // review-delete
+  const reviewDeletes = document.querySelectorAll("[review-delete]");
+  if (reviewDeletes) {
+    reviewDeletes.forEach((reviewDelete) => {
+      reviewDelete.addEventListener("click", () => {
+        const feedBackId = reviewDelete.getAttribute("review-delete");
+        fetch(`http://localhost:3000/courses/feedback/delete/${feedBackId}`, {
+          method: "delete",
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.code == 200) {
+              const personReview = document.querySelector(
+                `[person-review="${feedBackId}"]`
+              );
+
+              allFeedBack.removeChild(personReview);
+              const divRating = document.querySelector("#rating");
+              divRating.setAttribute("rating",data.ratingAverage);
+              const feedStars = divRating.querySelectorAll("[feed-star]");
+              const spanReview = divRating.querySelector("span");
+              spanReview.innerHTML = `${data.ratingAverage}.0`;
+              updateStar(data.ratingAverage, feedStars);
+            }
+          });
+      });
+    });
+  }
+
+  // end review-delete
+
+  // edit-review
+  const reviewEdits = document.querySelectorAll("[review-edit]");
+  if (reviewEdits) {
+    reviewEdits.forEach((reviewEdit) => {
+      reviewEdit.addEventListener("click", () => {
+        const feedBackId = reviewEdit.getAttribute("review-edit");
+        const personReview = document.querySelector(
+          `[person-review="${feedBackId}"]`
+        );
+        const innerEdit = personReview.querySelector(
+          `[inner-edit="${feedBackId}"]`
+        );
+        const editStars = innerEdit.querySelectorAll("[edit-star]");
+        const reviewedRating = personReview.querySelector("[reviewed-rating]");
+        const rating = reviewedRating.getAttribute("reviewed-rating");
+        innerEdit.classList.toggle("active");
+        editStars.forEach((editStar) => {
+          const data = editStar.getAttribute("data-value");
+          if (data <= rating) {
+            editStar.classList.add("checked");
+          }
+        });
+        const inputRating = innerEdit.querySelector("[edit-rating]");
+        const formEditReview = personReview.querySelector("[form-edit-review]");
+        console.log(formEditReview);
+        inputRating.value = rating;
+        const updateEditStar = (value) => {
+          editStars.forEach((editStar) => {
+            const data = editStar.getAttribute("data-value");
+            if (data <= value) editStar.classList.add("checked");
+            else editStar.classList.remove("checked");
+          });
+        };
+        editStars.forEach((editStar) => {
+          editStar.addEventListener("click", () => {
+            const data = editStar.getAttribute("data-value");
+            updateEditStar(data);
+            inputRating.value = data;
+          });
+        });
+        if (formEditReview) {
+          formEditReview.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const rating = e.target.elements[0].value;
+            const review = e.target.elements[1].value;
+            fetch(`http://localhost:3000/courses/feedback/edit/${feedBackId}`, {
+              method: "POST",
+              headers: {
+                "Content-type": "application/json",
+              },
+              body: JSON.stringify({
+                rating: rating,
+                review: review,
+              }),
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                console.log(data);
+                if (data.code == 200) {
+                  const reviewedRating =
+                    personReview.querySelector("[reviewed-rating]");
+                  const reviewedContent =
+                    personReview.querySelector("[reviewed-content]");
+                  reviewedRating.setAttribute("reviewed-rating", data.rating);
+                  reviewedContent.innerHTML = review;
+                  const divRating = document.querySelector("#rating");
+                  const feedStars = divRating.querySelectorAll("[feed-star]");
+                  const spanReview = divRating.querySelector("span");
+                  spanReview.innerHTML = `${data.ratingAverage}.0`;
+                  updateStar(data.ratingAverage, feedStars);
+                  reviewedStar();
+                  e.target.reset();
+                  innerEdit.classList.remove("active");
+                }
+              });
+          });
+        }
+      });
+    });
+  }
+
+  // end edit-review
 };
-const reviewLikes = document.querySelectorAll("[review-like]");
-console.log(reviewLikes);
-if (reviewLikes) {
-  reviewLikes.forEach((reviewLike) => {
-    reviewLike.addEventListener("click", () => {
-      const feedBackId = reviewLike.getAttribute("review-like");
-      reviewLike.classList.toggle("active-like");
-      let api = "";
-      let type = "";
-      if (reviewLike.classList.contains("active-like")) {
-        api = `http://localhost:3000/courses/feedback/like/${feedBackId}`;
-        type = "like";
-      } else {
-        api = `http://localhost:3000/courses/feedback/unlike/${feedBackId}`;
-        type = "unlike";
-      }
-      fetchApiReviewLike(api, feedBackId, reviewLike,type);
-    });
-  });
-}
-// end review-like
-
-
-// review-delete
-
-
-// end review-delete
+// end actionReview
+actionReview();

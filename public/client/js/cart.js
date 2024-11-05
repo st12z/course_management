@@ -1,7 +1,17 @@
 const tableCart = document.querySelector("[table-cart]");
 const bodyTable = tableCart.querySelector("tbody");
 const totalPayment = document.querySelector("[total-payment]");
-
+const spanQuantityCart = document.querySelector("[quantity-cart]");
+//  show quantityCart
+const showQuantityCart = () => {
+  const cart = JSON.parse(localStorage.getItem("cart"));
+  const quantityCart = cart.reduce((sum, item) => (sum += item.quantity), 0);
+  if (spanQuantityCart) {
+    spanQuantityCart.innerHTML = `(${quantityCart})`;
+  }
+};
+showQuantityCart();
+// end show quantityCart
 //input-quantity
 const changeQuantity = () => {
   const inputQuantity = document.querySelectorAll("[input-quantity]");

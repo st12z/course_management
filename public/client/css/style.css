@@ -243,3 +243,29 @@ a{
   color:blue;
   font-weight: 700;
 }
+[review-like]:hover{
+  cursor: pointer;
+}
+[review-edit]:hover{
+  cursor: pointer;
+}
+[review-reply]:hover{
+  cursor: pointer;
+}
+[review-delete]:hover{
+  cursor: pointer;
+}
+.inner-edit{
+  display:none;
+}
+.inner-edit.active{
+  display:block;
+}
+.person-reply{
+  border-bottom:1px solid #ddd;
+  margin-bottom: 5px;
+}
+.inner-reply{
+  margin-left: 40px;
+  padding:20px;
+}

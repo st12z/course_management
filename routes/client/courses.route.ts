@@ -10,4 +10,6 @@ router.post("/untym/:slugCourse",controller.untym);
 router.post("/feedback/:slugCourse",controller.feedBackPost);
 router.post("/feedback/like/:id",controller.likeFeed);
 router.post("/feedback/unlike/:id",controller.unlikeFeed);
+router.delete("/feedback/delete/:id",controller.deleteFeed);
+router.post("/feedback/edit/:id",controller.editFeed);
 export const courseRoutes: Router = router;
