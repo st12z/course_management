@@ -138,7 +138,16 @@ block main
                   <span reviewed-star class="fa fa-star" data-value="5" ></span> 
                 div(class="inner-content")
                   p #{feedback.review}
-
+                div(class="inner-action" feedback=feedback.id)
+                  if(feedback.like==0)
+                    i(class="fa-regular fa-thumbs-up mr-2" review-like=feedback.id)
+                  else
+                    span(class="mr-2" span-review-like) #{feedback.like} lượt thích
+                    i(class="fa-regular fa-thumbs-up mr-2" review-like=feedback.id)
+                  i(class="fa-solid fa-pen-to-square mr-2" review-edit=feedback.id)
+                  i(class="fa-solid fa-reply mr-2" review-reply=feedback.id)
+                  i(class="fa-regular fa-trash-can" review-delete=feedback.id)
+                  
 
 
 

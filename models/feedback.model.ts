@@ -4,7 +4,11 @@ const feedBackSchema = new mongoose.Schema(
    userId:String,
    courseId:String,
    rating:Number,
-   review:String
+   review:String,
+   like:{
+    default:0,
+    type:Number,
+   }
   },
   {
     timestamps: true,

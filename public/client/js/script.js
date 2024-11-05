@@ -217,6 +217,12 @@ if (formReview) {
           <div class="inner-content">
             <p>${data.review}</p>
           </div>
+          <div class="inner-action">
+            <i class="fa-regular fa-thumbs-up mr-2" review-like="${data.id}"></i>
+            <i class="fa-solid fa-pen-to-square mr-2" review-edit="${data.id}"></i>
+            <i class="fa-solid fa-reply mr-2" review-reply="${data.id}"></i>
+            <i class="fa-regular fa-trash-can" review-delete="${data.id}"></i>
+          </div>
         `;
         const reviewedStars = div.querySelectorAll("[reviewed-star]");
         reviewedStars.forEach((reviewedStar) => {
@@ -232,3 +238,74 @@ if (formReview) {
   });
 }
 // end form-rating andinsert feed back
+
+// review-like
+
+const fetchApiReviewLike = (api, id, reviewLike, type) => {
+  fetch(api, {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({
+      id: id,
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      const innerAction = document.querySelector(
+        `[feedback="${data.feedBackId}"]`
+      );
+      console.log(data);
+      if ((type == "like")) {
+        let spanLike=innerAction.querySelector("[span-review-like]");
+        if (!spanLike) {
+          spanLike = document.createElement("span");
+          spanLike.classList.add("mr-2");
+          spanLike.setAttribute("span-review-like","")
+          spanLike.innerHTML = `${data.like} lượt thích`;
+          innerAction.insertBefore(spanLike, reviewLike);
+          
+        }
+        else{
+          spanLike.innerHTML=`${data.like} lượt thích`;
+        }
+      }
+      else{
+        const spanLike=innerAction.querySelector("[span-review-like]");
+        if(data.like==0){
+          innerAction.removeChild(spanLike);
+        }
+        else{
+          spanLike.innerHTML=`${data.like} lượt thích`;
+        }
+      }
+    });
+};
+const reviewLikes = document.querySelectorAll("[review-like]");
+console.log(reviewLikes);
+if (reviewLikes) {
+  reviewLikes.forEach((reviewLike) => {
+    reviewLike.addEventListener("click", () => {
+      const feedBackId = reviewLike.getAttribute("review-like");
+      reviewLike.classList.toggle("active-like");
+      let api = "";
+      let type = "";
+      if (reviewLike.classList.contains("active-like")) {
+        api = `http://localhost:3000/courses/feedback/like/${feedBackId}`;
+        type = "like";
+      } else {
+        api = `http://localhost:3000/courses/feedback/unlike/${feedBackId}`;
+        type = "unlike";
+      }
+      fetchApiReviewLike(api, feedBackId, reviewLike,type);
+    });
+  });
+}
+// end review-like
+
+
+// review-delete
+
+
+// end review-delete

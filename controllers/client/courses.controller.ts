@@ -19,7 +19,7 @@ export const index = async (req: Request, res: Response) => {
   for (const course of courses) {
     course["price_special"] = course["price"] * (1 - course["discount"] / 100);
   }
-  
+
   res.render("client/pages/courses/index", {
     pageTitle: "Trang danh sách khóa học",
     courses: courses,
@@ -40,13 +40,13 @@ export const detail = async (req: Request, res: Response) => {
     lectures.push(lecture);
   }
   course["price_special"] = course["price"] * (1 - course["discount"] / 100);
-  const feedbacks=await FeedBack.find().sort({createdAt:-1});
+  const feedbacks = await FeedBack.find().sort({ createdAt: -1 });
   console.log(feedbacks);
   res.render("client/pages/courses/detail", {
     pageTitle: "Trang chi tiết khóa học",
     course: course,
     lectures: lectures,
-    feedbacks:feedbacks
+    feedbacks: feedbacks,
   });
 };
 
@@ -58,11 +58,13 @@ export const like = async (req: Request, res: Response) => {
     deleted: false,
     status: "active",
   });
-  await Course.updateOne({ slug: slugCourse }, { like:course.like+1 });
+
+  await Course.updateOne({ slug: slugCourse }, { like: course.like + 1 });
+
   res.json({
-    code:200,
-    messages:"Cập nhật thành công",
-    like:course["like"]+1
+    code: 200,
+    messages: "Cập nhật thành công",
+    like: course["like"] + 1,
   });
 };
 export const unlike = async (req: Request, res: Response) => {
@@ -72,11 +74,11 @@ export const unlike = async (req: Request, res: Response) => {
     deleted: false,
     status: "active",
   });
-  await Course.updateOne({ slug: slugCourse }, { like:course.like-1 });
+  await Course.updateOne({ slug: slugCourse }, { like: course.like - 1 });
   res.json({
-    code:200,
-    messages:"Cập nhật thành công",
-    like:course["like"]+-1
+    code: 200,
+    messages: "Cập nhật thành công",
+    like: course["like"] + -1,
   });
 };
 export const tym = async (req: Request, res: Response) => {
@@ -86,16 +88,24 @@ export const tym = async (req: Request, res: Response) => {
     deleted: false,
     status: "active",
   });
-  await Course.updateOne({ slug: slugCourse }, { tym:course.tym+1 });
-  const dataFavorite={
-    courseId:course["id"]
+  await Course.updateOne({ slug: slugCourse }, { tym: course.tym + 1 });
+  const dataFavorite = {
+    courseId: course["id"],
+  };
+  const favoriteSong = await FavoriteCourse.findOne({
+    courseId: course.id,
+    deleted: false,
+    status: "active",
+  });
+  if (!favoriteSong) {
+    const newFavoriteSong = new FavoriteCourse(dataFavorite);
+    newFavoriteSong.save();
   }
-  const favoriteSong=new FavoriteCourse(dataFavorite);
-  favoriteSong.save();
+
   res.json({
-    code:200,
-    messages:"Cập nhật thành công",
-    tym:course["tym"]+1
+    code: 200,
+    messages: "Cập nhật thành công",
+    tym: course["tym"] + 1,
   });
 };
 export const untym = async (req: Request, res: Response) => {
@@ -105,34 +115,60 @@ export const untym = async (req: Request, res: Response) => {
     deleted: false,
     status: "active",
   });
-  await Course.updateOne({ slug: slugCourse }, { tym:course.tym-1 });
+  await Course.updateOne({ slug: slugCourse }, { tym: course.tym - 1 });
   res.json({
-    code:200,
-    messages:"Cập nhật thành công",
-    tym:course["tym"]-1
+    code: 200,
+    messages: "Cập nhật thành công",
+    tym: course["tym"] - 1,
   });
 };
 export const feedBackPost = async (req: Request, res: Response) => {
-  const rating=req.body.rating;
-  const review=req.body.review;
-  const course=await Course.findOne({
-    slug:req.params.slugCourse,
-    deleted:false,
-    status:"active"
+  const rating = req.body.rating;
+  const review = req.body.review;
+  const course = await Course.findOne({
+    slug: req.params.slugCourse,
+    deleted: false,
+    status: "active",
   });
-  const courseId=course.id;
-  const feedBack= new FeedBack({
-    userId:"",
-    rating:rating,
-    review:review,
-    courseId:courseId
+  const courseId = course.id;
+  const feedBack = new FeedBack({
+    userId: "",
+    rating: rating,
+    review: review,
+    courseId: courseId,
   });
   await feedBack.save();
   res.json({
-    code:200,
-    messages:"Gửi data lên server thành công",
-    review:review,
-    rating:rating
+    code: 200,
+    messages: "Gửi data lên server thành công",
+    review: review,
+    rating: rating,
+    id: feedBack.id,
   });
 };
-
+export const likeFeed = async (req: Request, res: Response) => {
+  const feedBackId=req.body.id;
+  const feedBack=await FeedBack.findOne({
+    _id:feedBackId
+  });
+  await FeedBack.updateOne({_id:feedBackId},{like:feedBack.like+1});
+  res.json({
+    code: 200,
+    messages: "Gửi data lên server thành công",
+    feedBackId:feedBackId,
+    like:feedBack.like+1
+  });
+};
+export const unlikeFeed = async (req: Request, res: Response) => {
+  const feedBackId=req.body.id;
+  const feedBack=await FeedBack.findOne({
+    _id:feedBackId
+  });
+  await FeedBack.updateOne({_id:feedBackId},{like:feedBack.like-1});
+  res.json({
+    code: 200,
+    messages: "Gửi data lên server thành công",
+    feedBackId:feedBackId,
+    like:feedBack.like-1
+  });
+};

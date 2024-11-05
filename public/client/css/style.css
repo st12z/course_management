@@ -239,3 +239,7 @@ a{
   border-bottom:2px solid #ddd;
   margin-bottom: 10px;
 }
+.active-like{
+  color:blue;
+  font-weight: 700;
+}
