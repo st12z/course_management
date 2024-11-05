@@ -246,13 +246,13 @@ if (formReview) {
         `;
         allFeedBack.insertBefore(div, nodeFirst);
         const divRating = document.querySelector("#rating");
-        divRating.setAttribute("rating",data.ratingAverage);
+        divRating.setAttribute("rating", data.ratingAverage);
         const feedStars = divRating.querySelectorAll("[feed-star]");
         const spanReview = divRating.querySelector("span");
-        const reviewingStars=formReview.querySelectorAll("[reviewing-star]");
+        const reviewingStars = formReview.querySelectorAll("[reviewing-star]");
         spanReview.innerHTML = `${data.ratingAverage}.0`;
         updateStar(data.ratingAverage, feedStars);
-        updateStar(0,reviewingStars);
+        updateStar(0, reviewingStars);
         reviewedStar();
         actionReview();
       });
@@ -341,7 +341,7 @@ const actionReview = () => {
 
               allFeedBack.removeChild(personReview);
               const divRating = document.querySelector("#rating");
-              divRating.setAttribute("rating",data.ratingAverage);
+              divRating.setAttribute("rating", data.ratingAverage);
               const feedStars = divRating.querySelectorAll("[feed-star]");
               const spanReview = divRating.querySelector("span");
               spanReview.innerHTML = `${data.ratingAverage}.0`;
@@ -439,3 +439,55 @@ const actionReview = () => {
 };
 // end actionReview
 actionReview();
+
+// form-search
+const formSearch = document.querySelector("[form-search]");
+if (formSearch) {
+  const innerSuggest = formSearch.querySelector(".inner-suggest");
+  const inputSearch = formSearch.querySelector("input");
+  inputSearch.addEventListener("keyup", (e) => {
+    const keyword = e.target.value;
+    if (keyword && keyword != "") {
+      const api = `http://localhost:3000/search/suggest?keyword=${keyword}`;
+      fetch(api)
+        .then((res) => {
+          if (!res) {
+            throw new Error("Lỗi truyền!");
+          }
+          return res.json();
+        })
+        .then((data) => {
+          const courseSuggest = data.courseSuggest;
+          if (data.courseSuggest.length > 0) {
+            innerSuggest.classList.add("active");
+            const HTML = courseSuggest.map((item) => {
+              return `
+              <a href="/courses/detail/${item.slug}">
+                <div class="inner-item"> 
+                  <div class="inner-thumbnail">
+                    <img src="${item.thumbnail}"/>
+                  </div>
+                  <div class="inner-name">
+                    <p>${item.title}</p>
+                  </div>
+                </div>
+              </a>
+          `;
+            });
+            innerSuggest.innerHTML = HTML.join("");
+          } else {
+            innerSuggest.innerHTML = "";
+            innerSuggest.classList.remove("active");
+          }
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
+    } else {
+      innerSuggest.innerHTML = "";
+      innerSuggest.classList.remove("active");
+    }
+  });
+}
+
+// end form-search

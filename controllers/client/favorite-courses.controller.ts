@@ -7,6 +7,7 @@ export const index = async (req: Request, res: Response) => {
     status: "active",
   });
   let courses = [];
+  let courseSuggest=[];
   for (const favoriteCourse of favoriteCourses) {
     const id = favoriteCourse["courseId"];
     const course = await Course.findOne({
@@ -15,10 +16,13 @@ export const index = async (req: Request, res: Response) => {
       status: "active",
     });
     course["price_special"] = course["price"] * (1 - course["discount"] / 100);
+    courseSuggest.push(course);
     courses.push(course);
   }
+  console.log(favoriteCourses);
   res.render("client/pages/favorite-courses/index", {
     pageTitle: "Danh sách khóa học yêu thích",
     courses: courses,
+    courseSuggest:courseSuggest
   });
 };

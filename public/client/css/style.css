@@ -269,3 +269,30 @@ a{
   margin-left: 40px;
   padding:20px;
 }
+.inner-suggest{
+  border:1px solid blue;
+  padding: 10px;
+}
+.inner-suggest .inner-thumbnail img{
+  width: 50px;
+  height: auto;
+  margin-right: 5px;
+}
+.inner-suggest .inner-item{
+  display:flex;
+  padding: 5px;
+  border-bottom: 1px solid black;
+  margin-bottom: 10px;
+}
+.inner-search{
+  position: relative;
+}
+.inner-suggest{
+  display: none;
+  position: absolute;
+  width: 100%;
+  z-index: 99;
+}
+.inner-suggest.active{
+  display:block;
+}

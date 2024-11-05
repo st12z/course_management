@@ -8,8 +8,9 @@ header.header
       .col-4
         .inner-search
           form(
-            action="/search/result"
+            form-search
             method="GET"
+            action="/search/result"
           )
             div(class="form-group d-flex mb-0")
               input(
@@ -23,6 +24,7 @@ header.header
                 type="submit"
                 class="btn btn-primary"
               ) Tìm
+            .inner-suggest  
       .col-5
         .inner-list
           ul
