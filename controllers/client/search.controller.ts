@@ -19,6 +19,24 @@ export const index=async(req:Request,res:Response)=>{
         courseSuggest:courseSuggest
       })
       break;
+    case "result":
+      const courses=await Course.find({
+        deleted:false,
+        status:"active",
+        $or:[
+          {slug:regexKeyword},
+          {title:regexKeyword},
+        ]
+      });
+      for (const course of courses) {
+        course["price_special"] = course["price"] * (1 - course["discount"] / 100);
+      }
+      res.render("client/pages/search/result",{
+        pageTitle:"Kết quả tìm kiếm",
+        courses:courses,
+        keyword:keyword
+      })
+      break;
     default:
       break;
   }

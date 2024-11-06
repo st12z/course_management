@@ -1,7 +1,7 @@
 header.header
   .container
     .row
-      .col-3
+      .col-2
         .inner-logo
           a(href="/") 
             img(src="https://img.freepik.com/free-vector/flat-design-library-logo-template_23-2149326889.jpg" alit="Logo")
@@ -25,7 +25,7 @@ header.header
                 class="btn btn-primary"
               ) Tìm
             .inner-suggest  
-      .col-5
+      .col-6
         .inner-list
           ul
             li
@@ -36,4 +36,13 @@ header.header
               a(href="/cart") 
                 <i class="fa-solid fa-cart-shopping"></i> 
                 |Giỏ hàng <span quantity-cart>(0)</span>
+            if(user)
+              li
+                button(class="btn btn-primary btn-sm") #{user.fullName}
+                a(href="/auth/logout") Đăng xuất
+            else
+              li
+                a(href="/auth/login") Đăng nhập
+              li
+                a(href="/auth/register") Đăng ký
     

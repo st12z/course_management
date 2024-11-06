@@ -296,3 +296,23 @@ a{
 .inner-suggest.active{
   display:block;
 }
+[show-alert]{
+  display: inline-block;
+  position: absolute;
+  right: 20px;
+  top: 200px;
+}
+.alert-success {
+  background-color: #4CAF50; /* Màu nền xanh */
+  color: white; /* Màu chữ trắng */
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.alert-error {
+  background-color: #f44336; /* Màu nền đỏ */
+  color: white; /* Màu chữ trắng */
+  padding: 15px;
+  margin-bottom: 15px;
+}
+

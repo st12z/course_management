@@ -5,6 +5,9 @@
     "removeComments": true,
     "esModuleInterop": true,
     "outDir": "dist",
-
+    "typeRoots": [
+      "./types",
+      "./node_modules/@types"
+    ]
   }
 }
