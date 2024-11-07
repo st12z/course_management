@@ -25,8 +25,8 @@ const courseSchema = new mongoose.Schema(
       videoDemo:String,
       learningPath:[]
     },
-    tym:Number,
-    like:Number,
+    tym:[],
+    like:[],
     watch:Number,
     topicId:String,
     rating:Number,

@@ -195,8 +195,8 @@ if (formReview) {
               <img review-avatar src="/client/images/avatar.jpg" width="50px"/>
             </div>
             <div class="inner-name">
-              <p>Thực</p>
-              <p>6 ngày trước</p>
+              <p>${data.infoUser.fullName}</p>
+              <p>${data.elapsedTime}</p>
             </div>
           </div>
           <div class="inner-rating" reviewed-rating="${data.rating}">

@@ -17,7 +17,7 @@ block main
         ul(class="info-course")
           li
             b Số lượng người thích : 
-            span(amount-like) #{course.like.toLocaleString()} thích 
+            span(amount-like) #{course.like.length.toLocaleString()} thích 
             i(class="fa-regular fa-thumbs-up" show-like)
 
           li
@@ -26,7 +26,7 @@ block main
             <i class="fa-solid fa-eye"></i>
           li
             b Số lượng người tym: 
-            span(amount-tym) #{course.tym.toLocaleString()} yêu thích 
+            span(amount-tym) #{course.tym.length.toLocaleString()} yêu thích 
             i(class="fa-regular fa-heart" show-tym)
 
 
@@ -59,8 +59,14 @@ block main
             else
               span Hết
           p
-            i(class="fa-regular fa-thumbs-up" button-like=course.slug)
-            i(class="fa-regular fa-heart" button-tym=course.slug)
+            if(course.like.includes(user.id))
+              i(class="fa-regular fa-thumbs-up active" button-like=course.slug)
+            else
+              i(class="fa-regular fa-thumbs-up" button-like=course.slug)
+            if(course.tym.includes(user.id))
+              i(class="fa-regular fa-heart active" button-tym=course.slug)
+            else
+              i(class="fa-regular fa-heart" button-tym=course.slug)
           button(class="btn btn-success" button-cart=course.id) Thêm vào giỏ hàng <i class="fa-solid fa-cart-shopping"></i>
     .row.mt-5
       .col-12
@@ -128,8 +134,8 @@ block main
                   div(class="inner-avatar")
                     img(review-avatar src="/client/images/avatar.jpg" width="50px")
                   div(class="inner-name")
-                    p Thực
-                    p 6 ngày trước 
+                    p #{feedback.infoUser.fullName}
+                    p #{feedback.infoUser.createdAt}
                 div(class="inner-rating" reviewed-rating=feedback.rating)
                   <span reviewed-star class="fa fa-star" data-value="1" ></span>
                   <span reviewed-star class="fa fa-star" data-value="2" ></span>
@@ -142,10 +148,14 @@ block main
                   if(feedback.like==0)
                     i(class="fa-regular fa-thumbs-up mr-2" review-like=feedback.id)
                   else
-                    span(class="mr-2" span-review-like) #{feedback.like} lượt thích
-                    i(class="fa-regular fa-thumbs-up mr-2" review-like=feedback.id)
-                  i(class="fa-solid fa-pen-to-square mr-2" review-edit=feedback.id)
-                  i(class="fa-regular fa-trash-can" review-delete=feedback.id)
+                    span(class="mr-2" span-review-like) #{feedback.like.length.toLocaleString()} lượt thích
+                    if(feedback.like.includes(user.id))
+                      i(class="fa-regular fa-thumbs-up mr-2 active-like" review-like=feedback.id)
+                    else
+                      i(class="fa-regular fa-thumbs-up mr-2" review-like=feedback.id)
+                  if(feedback.userId==user.id)
+                    i(class="fa-solid fa-pen-to-square mr-2" review-edit=feedback.id)
+                    i(class="fa-regular fa-trash-can" review-delete=feedback.id)
                 div(class="inner-edit" inner-edit=feedback.id)
                   form(form-edit-review)
                     .inner-review
@@ -169,9 +179,9 @@ block main
                           name="description"
                         ) #{feedback.review}
                       button(class="btn btn-primary mb-3" type="submit") Cập nhật
-                
-                  
-                  
+
+
+
 
 
 

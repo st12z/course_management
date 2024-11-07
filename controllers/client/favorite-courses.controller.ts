@@ -1,13 +1,17 @@
 import { Request, Response } from "express";
 import FavoriteCourse from "../../models/favorite-course.model";
 import Course from "../../models/course.model";
+import User from "../../models/user.model";
 export const index = async (req: Request, res: Response) => {
+  const user=res.locals.user;
+  console.log(user);
   const favoriteCourses = await FavoriteCourse.find({
     deleted: false,
     status: "active",
+    userId:user.id
   });
   let courses = [];
-  let courseSuggest=[];
+  let courseSuggest=await Course.find({deleted:false,status:"active"});
   for (const favoriteCourse of favoriteCourses) {
     const id = favoriteCourse["courseId"];
     const course = await Course.findOne({
@@ -16,7 +20,6 @@ export const index = async (req: Request, res: Response) => {
       status: "active",
     });
     course["price_special"] = course["price"] * (1 - course["discount"] / 100);
-    courseSuggest.push(course);
     courses.push(course);
   }
   console.log(favoriteCourses);

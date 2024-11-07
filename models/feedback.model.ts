@@ -6,10 +6,9 @@ const feedBackSchema = new mongoose.Schema(
    rating:Number,
    review:String,
    like:{
-    default:0,
-    type:Number,
+    default:[],
+    type:[],
    },
-   reply:[]
   },
   {
     timestamps: true,
