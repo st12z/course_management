@@ -9,6 +9,9 @@ import { searchRoutes } from "./search.route"
 import { authRoutes } from "./auth.route"
 import * as authMiddlware from "../../middlewares/auth.middleware";
 import { infoMiddleware } from "../../middlewares/info.midleware"
+import { addressRoutes } from "./address.route"
+import { paymentRoutes } from "./payment.route"
+import { trackOrderRoutes } from "./track-order.route"
 export const clienRoutes=(app:Express)=>{
   app.use(infoMiddleware);
   app.use("/",homeRoutes),
@@ -18,5 +21,8 @@ export const clienRoutes=(app:Express)=>{
   app.use("/cart",cartRoutes),
   app.use("/try",tryLearningRoutes),
   app.use("/search",searchRoutes),
-  app.use("/auth",authRoutes)
+  app.use("/auth",authRoutes),
+  app.use("/address",addressRoutes),
+  app.use("/payment",authMiddlware.authMiddleware,paymentRoutes),
+  app.use("/track-order",trackOrderRoutes)
 }

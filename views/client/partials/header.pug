@@ -25,7 +25,7 @@ header.header
                 class="btn btn-primary"
               ) Tìm
             .inner-suggest  
-      .col-6
+      .col-5
         .inner-list
           ul
             li
@@ -36,9 +36,12 @@ header.header
               a(href="/cart") 
                 <i class="fa-solid fa-cart-shopping"></i> 
                 |Giỏ hàng <span quantity-cart>(0)</span>
+            li
+              a(href="/track-order")
+                |Tra cứu đơn hàng
             if(user)
               li
-                button(class="btn btn-primary btn-sm") #{user.fullName}
+                img(src="" alt ="avatar")
                 a(href="/auth/logout") Đăng xuất
             else
               li

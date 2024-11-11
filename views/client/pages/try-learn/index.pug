@@ -9,7 +9,7 @@ block main
         ul(class="info-course")
           li
             b Số lượng người thích : 
-            span(amount-like) #{course.like.toLocaleString()} thích 
+            span(amount-like) #{course.like.length.toLocaleString()} thích 
             i(class="fa-regular fa-thumbs-up" show-like)
             
           li
@@ -18,7 +18,7 @@ block main
             <i class="fa-solid fa-eye"></i>
           li
             b Số lượng người tym: 
-            span(amount-tym) #{course.tym.toLocaleString()} yêu thích 
+            span(amount-tym) #{course.tym.length.toLocaleString()} yêu thích 
             i(class="fa-regular fa-heart" show-tym)
             
 

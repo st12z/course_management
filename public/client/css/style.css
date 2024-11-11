@@ -316,3 +316,9 @@ a{
   margin-bottom: 15px;
 }
 
+.alert-error.hidden{
+  display:none;
+}
+.inner-logo-track img{
+  width: 300px;
+}

@@ -8,6 +8,7 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import flash from "express-flash";
+import cors from 'cors';
 dotenv.config();
 database.connect();
 const app: Express = express();
@@ -20,6 +21,8 @@ app.use(cookieParser("AB"));
 app.use(session({cookie:{maxAge:60000}}));
 app.use(flash());
 app.use(bodyParser.json());
+app.use(cors());
+
 app.use(express.static(path.join(__dirname, "public")));
 clienRoutes(app);
 app.listen(PORT, () => {

@@ -60,7 +60,8 @@ const fetchApiCart = () => {
   })
     .then((res) => res.json())
     .then((data) => {
-      if (data.code == 200 ) {
+      if (data.code == 200) {
+        console.log(data);
         const courses = data.courses;
         const html = courses.map((item, index) => {
           return `
@@ -79,6 +80,7 @@ const fetchApiCart = () => {
                 value="${item.quantity}"
                 style="width:60px"
                 input-quantity=${item.infoCourse._id}
+                min="1"
               />
             </td>
             <td><span total-price>${item.totalPrice.toLocaleString()} đ</span></td>
@@ -101,3 +103,51 @@ const fetchApiCart = () => {
 };
 fetchApiCart();
 // end fetchApiCart
+
+// fetch address
+const provinceSelect = document.querySelector("[province]");
+if (provinceSelect) {
+  provinceSelect.addEventListener("change", (e) => {
+    const provinceId = e.target.value;
+    fetch(`http://localhost:3000/address/province/${provinceId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.code == 200) {
+          const districts = data.districts;
+          const districtSelect = document.querySelector("[districts]");
+          console.log(districtSelect);
+          const html = districts.map((item) => {
+            return `<option value=${item.Id}>${item.Name}</option>`;
+          });
+          districtSelect.innerHTML = `<option value="">-- Chọn Quận/Huyện --</option>` + html.join("");
+          districtSelect.addEventListener("change", (e) => {
+            const districtId = e.target.value;
+            fetch(`http://localhost:3000/address/district/${districtId}`)
+              .then((res) => res.json())
+              .then((data) => {
+                if (data.code == 200) {
+                  const wards = data.wards;
+                  const wardSelect = document.querySelector("[wards]");
+                  const html = wards.map((item) => {
+                    return `<option value=${item.Id}>${item.Name}</option>`;
+                  });
+                  wardSelect.innerHTML = `<option value="">-- Chọn Phường/Xã --</option>` + html.join("");
+                }
+              });
+          });
+        }
+      });
+  });
+}
+// end fetch address
+
+
+// form-order
+const formOrder=document.querySelector("[form-order]");
+if(formOrder){
+  formOrder.addEventListener("submit",(e)=>{
+    const inputCart=document.querySelector("input[cart]");
+    inputCart.value=localStorage.getItem("cart");
+  })
+}
+// end form-order

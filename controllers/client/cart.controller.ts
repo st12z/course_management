@@ -1,15 +1,18 @@
 import { Request, Response } from "express";
 import Course from "../../models/course.model";
+import Province from "../../models/province.model";
 export const index = async (req: Request, res: Response) => {
-  console.log(req.body);
+  const provinces=await Province.find();
   res.render("client/pages/cart/index", {
     pageTitle: "Trang giỏ hàng",
+    provinces:provinces,
   });
 };
 export const listJson = async (req: Request, res: Response) => {
   const courseIds = req.body;
   const courses = [];
   let totalPayment = 0;
+  const provinces=await Province.find();
 
   for (const item of courseIds) {
     const courseId = item.courseId;
@@ -29,7 +32,6 @@ export const listJson = async (req: Request, res: Response) => {
 
     totalPayment += totalPrice;
   }
-  console.log(courses);
   res.json({
     code: 200,
     courses: courses,

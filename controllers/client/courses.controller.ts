@@ -57,7 +57,7 @@ export const detail = async (req: Request, res: Response) => {
       new Date(),
       { addSuffix: true }
     );
-    feedBack["infoUser"]=infoUser;
+    feedBack["infoUser"] = infoUser;
   }
   res.render("client/pages/courses/detail", {
     pageTitle: "Trang chi tiết khóa học",
@@ -69,6 +69,14 @@ export const detail = async (req: Request, res: Response) => {
 
 export const like = async (req: Request, res: Response) => {
   const slugCourse = req.params.slugCourse;
+  const token = req.cookies.token;
+  if (!token) {
+    res.json({
+      code:400,
+      messages:"Bạn cần đăng nhập!"
+    });
+    return;
+  }
   const email = res.locals.user.email;
   const user = await User.findOne({
     email: email,
@@ -94,6 +102,15 @@ export const like = async (req: Request, res: Response) => {
 };
 export const unlike = async (req: Request, res: Response) => {
   const slugCourse = req.params.slugCourse;
+  const token = req.cookies.token;
+  if (!token) {
+    res.json({
+      code:400,
+      messages:"Bạn cần đăng nhập!"
+    });
+    return;
+  }
+
   const email = res.locals.user.email;
   const user = await User.findOne({
     email: email,
@@ -119,6 +136,14 @@ export const unlike = async (req: Request, res: Response) => {
 };
 export const tym = async (req: Request, res: Response) => {
   const slugCourse = req.params.slugCourse;
+  const token = req.cookies.token;
+  if (!token) {
+    res.json({
+      code:400,
+      messages:"Bạn cần đăng nhập!"
+    });
+    return;
+  }
   const course = await Course.findOne({
     slug: slugCourse,
     deleted: false,
@@ -159,6 +184,14 @@ export const tym = async (req: Request, res: Response) => {
 };
 export const untym = async (req: Request, res: Response) => {
   const slugCourse = req.params.slugCourse;
+  const token = req.cookies.token;
+  if (!token) {
+    res.json({
+      code:400,
+      messages:"Bạn cần đăng nhập!"
+    });
+    return;
+  }
   const email = res.locals.user.email;
   const user = await User.findOne({
     email: email,
@@ -188,6 +221,15 @@ export const untym = async (req: Request, res: Response) => {
   });
 };
 export const feedBackPost = async (req: Request, res: Response) => {
+  const slugCourse = req.params.course;
+  const token = req.cookies.token;
+  if (!token) {
+    res.json({
+      code:400,
+      messages:"Bạn cần đăng nhập!"
+    });
+    return;
+  }
   const rating = req.body.rating;
   const review = req.body.review;
   const course = await Course.findOne({
@@ -195,8 +237,8 @@ export const feedBackPost = async (req: Request, res: Response) => {
     deleted: false,
     status: "active",
   });
-  const userId=res.locals.user.id;
-  const user =await User.findOne({_id:userId}).select("-password");
+  const userId = res.locals.user.id;
+  const user = await User.findOne({ _id: userId }).select("-password");
   const courseId = course.id;
   const feedBack = new FeedBack({
     userId: res.locals.user.id,
@@ -215,19 +257,31 @@ export const feedBackPost = async (req: Request, res: Response) => {
     { slug: req.params.slugCourse },
     { rating: ratingAvg }
   );
-  const elapsedTime= formatDistance(feedBack["createdAt"] as Date, new Date(), { addSuffix: true });
+  const elapsedTime = formatDistance(
+    feedBack["createdAt"] as Date,
+    new Date(),
+    { addSuffix: true }
+  );
   res.json({
     code: 200,
     messages: "Gửi data lên server thành công",
     review: review,
     rating: rating,
     id: feedBack.id,
-    infoUser:user,
-    elapsedTime:elapsedTime,
+    infoUser: user,
+    elapsedTime: elapsedTime,
     ratingAverage: ratingAvg,
   });
 };
 export const likeFeed = async (req: Request, res: Response) => {
+  const token = req.cookies.token;
+  if (!token) {
+    res.json({
+      code:400,
+      messages:"Bạn cần đăng nhập!"
+    });
+    return;
+  }
   const feedBackId = req.body.id;
   const feedBack = await FeedBack.findOne({
     _id: feedBackId,
@@ -248,6 +302,14 @@ export const likeFeed = async (req: Request, res: Response) => {
   });
 };
 export const unlikeFeed = async (req: Request, res: Response) => {
+  const token = req.cookies.token;
+  if (!token) {
+    res.json({
+      code:400,
+      messages:"Bạn cần đăng nhập!"
+    });
+    return;
+  }
   const feedBackId = req.body.id;
   const feedBack = await FeedBack.findOne({
     _id: feedBackId,

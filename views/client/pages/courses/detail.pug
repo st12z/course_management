@@ -3,7 +3,9 @@ include ../../mixins/box-head.pug
 block main
   +box-head(pageTitle)
   .container
-
+    div(class="alert alert-error hidden"
+        show-alert
+      ) 
     div(id="rating" rating=course.rating )
       span(review-star) #{course.rating}.0
       <span feed-star class="fa fa-star" data-value="1" ></span>
@@ -59,11 +61,11 @@ block main
             else
               span Hết
           p
-            if(course.like.includes(user.id))
+            if(user && course.like.includes(user.id))
               i(class="fa-regular fa-thumbs-up active" button-like=course.slug)
             else
               i(class="fa-regular fa-thumbs-up" button-like=course.slug)
-            if(course.tym.includes(user.id))
+            if(user && course.tym.includes(user.id))
               i(class="fa-regular fa-heart active" button-tym=course.slug)
             else
               i(class="fa-regular fa-heart" button-tym=course.slug)
@@ -149,11 +151,11 @@ block main
                     i(class="fa-regular fa-thumbs-up mr-2" review-like=feedback.id)
                   else
                     span(class="mr-2" span-review-like) #{feedback.like.length.toLocaleString()} lượt thích
-                    if(feedback.like.includes(user.id))
+                    if(user && feedback.like.includes(user.id))
                       i(class="fa-regular fa-thumbs-up mr-2 active-like" review-like=feedback.id)
                     else
                       i(class="fa-regular fa-thumbs-up mr-2" review-like=feedback.id)
-                  if(feedback.userId==user.id)
+                  if(user && feedback.userId==user.id)
                     i(class="fa-solid fa-pen-to-square mr-2" review-edit=feedback.id)
                     i(class="fa-regular fa-trash-can" review-delete=feedback.id)
                 div(class="inner-edit" inner-edit=feedback.id)

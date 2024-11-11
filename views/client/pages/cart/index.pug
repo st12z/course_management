@@ -3,7 +3,7 @@ include ../../mixins/box-head.pug
 block main
   +box-head(pageTitle)
   .container
-    .row
+    .row.mb-3
       .col-12
         table(class="table table-hover" table-cart)
           thead
@@ -18,7 +18,58 @@ block main
             th Hoạt động
           tbody
       .col-12.text-right
-        h3(total-payment style="color:red")      
+        h3(total-payment style="color:red")     
+    .row.justify-content-center
+      .col-8
+        <div class="card">
+          <h5 class="card-header">Thông tin thanh toán</h5>
+          <div class="card-body">
+            form(class="form-group" method="GET" action="/payment/check-out" form-order)
+              label(for="fullName") Họ và tên
+              input(
+                type="text"
+                name="fullName"
+                id="fullName"
+                class="form-control"
+                required
+              )
+              label(for="phone") Số điện thoại
+              input(
+                type="text"
+                name="phone"
+                id="phone"
+                class="form-control"
+                required
+              )
+              label(for="province") Tỉnh, thành phố
+              select(name="provinceId" class="form-control" province required)
+                option(value="" selected)  -- Chọn tỉnh, thành phố
+                each province in provinces
+                  option(value=province.Id) #{province.Name}
+              label(for="district")  Quận, huyện
+              select(name="districtId" class="form-control" districts required)
+                option(value="" All selected) -- Chọn Quận/Huyện --
+              label(for="ward") Phường, xã
+              select(name="wardId" class="form-control" wards required)
+                option(value="" All) -- Chọn Phường/Xã --
+              label(for="detail-address") Địa chỉ cụ thể
+              textarea(
+                class="form-control"
+                name="detailAddress"
+                id="detail-address"
+                rows="5"
+                required
+              )
+              input(
+                type="text"
+                hidden
+                name="cart"
+                cart
+              )
+              div(class="form-group")
+                button(class="btn btn-primary" type="submit") Thanh toán 
+          </div>
+        </div>
 block script
   script(src="/client/js/cart.js")
               

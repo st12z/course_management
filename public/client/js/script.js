@@ -21,6 +21,10 @@ const fetchApiPOST = (slug, api, type) => {
         else if (type == "yêu thích") {
           amountTym.innerHTML = `${data.tym.toLocaleString()} ${type}`;
         }
+      } else {
+        const alert = document.querySelector("[show-alert]");
+        alert.classList.remove("hidden");
+        alert.innerHTML = `${data.messages}`;
       }
     })
     .catch((error) => {
@@ -183,13 +187,15 @@ if (formReview) {
     })
       .then((res) => res.json())
       .then((data) => {
-        e.target.reset();
-        const div = document.createElement("div");
         console.log(data);
-        const nodeFirst = allFeedBack.querySelector(".person-review");
-        div.classList.add("person-review");
-        div.setAttribute("person-review", data.id);
-        div.innerHTML = `
+        if (data.code == 200) {
+          e.target.reset();
+          const div = document.createElement("div");
+          console.log(data);
+          const nodeFirst = allFeedBack.querySelector(".person-review");
+          div.classList.add("person-review");
+          div.setAttribute("person-review", data.id);
+          div.innerHTML = `
           <div class="inner-info">
             <div class="inner-avatar">
               <img review-avatar src="/client/images/avatar.jpg" width="50px"/>
@@ -244,17 +250,23 @@ if (formReview) {
             </form>
           </div>
         `;
-        allFeedBack.insertBefore(div, nodeFirst);
-        const divRating = document.querySelector("#rating");
-        divRating.setAttribute("rating", data.ratingAverage);
-        const feedStars = divRating.querySelectorAll("[feed-star]");
-        const spanReview = divRating.querySelector("span");
-        const reviewingStars = formReview.querySelectorAll("[reviewing-star]");
-        spanReview.innerHTML = `${data.ratingAverage}.0`;
-        updateStar(data.ratingAverage, feedStars);
-        updateStar(0, reviewingStars);
-        reviewedStar();
-        actionReview();
+          allFeedBack.insertBefore(div, nodeFirst);
+          const divRating = document.querySelector("#rating");
+          divRating.setAttribute("rating", data.ratingAverage);
+          const feedStars = divRating.querySelectorAll("[feed-star]");
+          const spanReview = divRating.querySelector("span");
+          const reviewingStars =
+            formReview.querySelectorAll("[reviewing-star]");
+          spanReview.innerHTML = `${data.ratingAverage}.0`;
+          updateStar(data.ratingAverage, feedStars);
+          updateStar(0, reviewingStars);
+          reviewedStar();
+          actionReview();
+        } else {
+          const alert = document.querySelector("[show-alert]");
+          alert.classList.remove("hidden");
+          alert.innerHTML = `${data.messages}`;
+        }
       });
   });
 }
@@ -299,6 +311,10 @@ const actionReview = () => {
               spanLike.innerHTML = `${data.like} lượt thích`;
             }
           }
+        } else {
+          const alert = document.querySelector("[show-alert]");
+          alert.classList.remove("hidden");
+          alert.innerHTML = `${data.messages}`;
         }
       });
   };
@@ -491,3 +507,6 @@ if (formSearch) {
 }
 
 // end form-search
+
+
+
