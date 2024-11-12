@@ -5,6 +5,10 @@ const orderItemSchema = new mongoose.Schema(
     quantity:Number,
     codeActive:String,
     courseId:String,
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

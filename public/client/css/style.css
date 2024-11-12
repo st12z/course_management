@@ -314,11 +314,59 @@ a{
   color: white; /* Màu chữ trắng */
   padding: 15px;
   margin-bottom: 15px;
+  position: absolute;
+  right: 10px;
+  top: 200px;
+  z-index: 2;
 }
-
+.alert-success {
+  background-color: green; /* Màu nền đỏ */
+  color: white; /* Màu chữ trắng */
+  padding: 15px;
+  margin-bottom: 15px;
+  position: absolute;
+  right: 10px;
+  top: 200px;
+  z-index: 2;
+}
+.alert-success.hidden{
+  display: none;
+}
 .alert-error.hidden{
   display:none;
 }
 .inner-logo-track img{
   width: 300px;
+}
+.inner-vourcher{
+  padding: 0;
+  display: flex;
+  border: 1px solid #ddd;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  position: relative;
+}
+.inner-vourcher-thumbnail{
+  margin-left:0 ;
+  margin-right: 50px;
+  aspect-ratio: 4/3;
+}
+.inner-vourcher-thumbnail img{
+  width: 200px;
+  height:auto;
+  object-fit: cover;
+}
+.inner-vourcher-content{
+  margin-right: 50px;
+  margin-left: 20px;
+}
+.inner-vourcher-button{
+  margin-right: 10px;
+}
+.inner-vourcher-condition{
+  position: absolute;
+  right: 0;
+  bottom: 0;
 }

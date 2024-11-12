@@ -1,0 +1,46 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+include ../../mixins/alert.pug
+include ../../mixins/moment.pug
+
+block main
+  +alert-success(5000)
+  +alert-error(5000)
+  +box-head(pageTitle)
+  .container
+    div(class="alert alert-error hidden"
+        show-alert-error
+      ) 
+    div(class="alert alert-success hidden"
+        show-alert-success
+      ) 
+    .row
+      each vourcher in vourchers
+        .col-6
+          .inner-vourcher
+            .inner-vourcher-thumbnail
+              img(src=vourcher.thumbnail alt="Phiếu giảm giá")
+            .inner-vourcher-content
+              h5
+                b #{vourcher.title}
+              p
+                +formatDateTime(vourcher.createdAt)
+              p
+                +formatDateTime(vourcher.expireAt)
+            .inner-vourcher-button
+              if(vourcher.vourcherUser)
+                button(class="btn btn-secondary disabled" button-vourcher=vourcher.id) Lưu
+              else
+                button(class="btn btn-danger" button-vourcher=vourcher.id) Lưu
+            .inner-vourcher-condition
+              span(
+                class="badge badge-primary" data-toggle="tooltip" data-placement="top" title=`Đã mua ${vourcher.condition} sản phẩm` 
+              ) Điều kiện
+block script
+  script(src="client/js/vourcher.js")
+      
+  
+          
+            
+
+        

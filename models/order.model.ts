@@ -13,6 +13,10 @@ const orderSchema = new mongoose.Schema(
       type:String,
       default:"processing"
     },
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
     totalPayment:Number,
     totalPriceCourse:Number,
     feeTrans:Number

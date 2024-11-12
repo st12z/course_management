@@ -9,6 +9,7 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 import flash from "express-flash";
 import cors from 'cors';
+import moment from "moment"
 dotenv.config();
 database.connect();
 const app: Express = express();
@@ -22,7 +23,7 @@ app.use(session({cookie:{maxAge:60000}}));
 app.use(flash());
 app.use(bodyParser.json());
 app.use(cors());
-
+app.locals.moment=moment;
 app.use(express.static(path.join(__dirname, "public")));
 clienRoutes(app);
 app.listen(PORT, () => {
