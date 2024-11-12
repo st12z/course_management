@@ -43,6 +43,9 @@ header.header
               a(href="/vourchers") Săn vourcher
             if(user)
               li
+                a(href=`/vourchers/${user.id}`) Vourcher của bạn
+            if(user)
+              li
                 img(src="" alt ="avatar")
                 a(href="/auth/logout") Đăng xuất
             else

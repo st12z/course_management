@@ -1,7 +1,9 @@
 extends ../../layouts/default.pug
 include ../../mixins/box-head.pug
+include ../../mixins/alert.pug
 block main
   +box-head(pageTitle)
+  +alert-error(5000)
   .container
     .row.mb-3
       .col-12

@@ -325,8 +325,8 @@ a{
   padding: 15px;
   margin-bottom: 15px;
   position: absolute;
-  right: 10px;
-  top: 200px;
+  right: -10px;
+  top: 100px;
   z-index: 2;
 }
 .alert-success.hidden{
@@ -338,23 +338,33 @@ a{
 .inner-logo-track img{
   width: 300px;
 }
+[col-vourcher]{
+  height: 100px;
+  margin-bottom: 20px;
+}
+
 .inner-vourcher{
   padding: 0;
   display: flex;
   border: 1px solid #ddd;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
-  border-radius: 5px;
   position: relative;
+  border-radius: 10px;
+  
+  width: 450px;
+  height: 100px;
 }
+
 .inner-vourcher-thumbnail{
   margin-left:0 ;
-  margin-right: 50px;
-  aspect-ratio: 4/3;
+  margin-right: 10px;
+  width: 100px;
+  height: 100%;
+  aspect-ratio: 1/1;
 }
 .inner-vourcher-thumbnail img{
-  width: 200px;
+  width: 100px;
   height:auto;
   object-fit: cover;
 }
@@ -369,4 +379,32 @@ a{
   position: absolute;
   right: 0;
   bottom: 0;
+}
+.inner-vourcher-content{
+  display: flex;
+  flex-direction: column;
+}
+.inner-vourcher-content p{
+  font-size: 18px;
+  margin: 0;
+}
+.inner-user-vourcher{
+  padding: 0;
+  display: flex;
+  border: 1px solid #ddd;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 10px;
+  position: relative;
+  width: 450px;
+  height: 100px;
+}
+.inner-vourcher-user-content{
+  display: flex;
+  flex-direction: column;
+  margin-left: 0;
+}
+.inner-vourcher-user-content p{
+  font-size: 18px;
+  margin: 0;
 }

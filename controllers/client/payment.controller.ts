@@ -12,6 +12,8 @@ import qs from "qs";
 import { generateCode } from "../../helpers/generateCode";
 import OrderItem from "../../models/order-item.model";
 import Order from "../../models/order.model";
+import VourcherUser from "../../models/vourcher-user.model";
+import Vourcher from "../../models/vourcher.model";
 const config = {
   appid: `${process.env.APP_ID}`,
   key1: `${process.env.KEY1}`,
@@ -22,7 +24,12 @@ export const checkOut = async (req: Request, res: Response) => {
   const provinceId = req.query.provinceId;
   const districtId = req.query.districtId;
   const wardId = req.query.wardId;
-  const carts = JSON.parse(`${req.query.cart}`);
+  const carts = req.query.cart ? JSON.parse(req.query.cart as string) : [];
+  if(!carts || carts.length==0){
+    req.flash("error","Bạn vui lòng thêm sản phẩm!");
+    res.redirect("back");
+    return;
+  }
   const items = [];
   let totalPayment = 0;
   for (const cart of carts) {
@@ -50,19 +57,34 @@ export const checkOut = async (req: Request, res: Response) => {
   });
   const ward = await Ward.findOne({ Id: wardId });
   const dataUser = {
-    fullName: req.query.fullName,
-    phone: req.query.phone,
+    fullName: `${req.query["fullName"]}`,
+    phone: req.query["phone"],
     provinceName: province["Name"],
     districtName: district["Name"],
     wardName: ward["Name"],
     detailAddress: req.query.detailAddress,
   };
+  // get vourcher
+  const userId=res.locals.user.id;
+  const vourcherUsers=await VourcherUser.find({
+    userId:userId,
+    deleted:false,
+    status:"active"
+  });
+  const vourchers=[];
+  for(const vourcherUser of vourcherUsers){
+    const vourcher=await Vourcher.findOne({
+      _id:vourcherUser["vourcherId"]
+    });
+    vourchers.push(vourcher);
+  }
+  // end get vourcher
   res.render("client/pages/payment/index", {
     pageTitle: "Trang thanh toán",
     dataUser: dataUser,
     items: items,
     totalPayment: totalPayment,
-    itemsJSON: JSON.stringify(items),
+    vourchers:vourchers
   });
 };
 
@@ -81,7 +103,9 @@ export const processing = async (req: Request, res: Response) => {
     redirecturl: `http://localhost:3000/payment/order-status/${apptransId}`,
   };
 
-  const dataItems = JSON.parse(req.body.items);
+  const carts = JSON.parse(req.body.carts as string);
+  console.log(carts);
+  const dataItems = [];
   const items = [];
   let amount = 0;
   const dataOrder = {
@@ -96,6 +120,20 @@ export const processing = async (req: Request, res: Response) => {
   };
   const orderDB = new Order(dataOrder);
   await orderDB.save();
+  for (const cart of carts) {
+    const courseId = cart.courseId;
+    const quantity = cart.quantity;
+    const course = await Course.findOne({ _id: courseId });
+    course["price_special"] = course["price"] * (1 - course["discount"] / 100);
+    const item = {
+      quantity: quantity,
+      infoCourse: {
+        ...course.toObject(), // chuyển course thành object thường để tránh mất dữ liệu khi stringify
+        price_special: course["price_special"],
+      },
+    };
+    dataItems.push(item);
+  }
   for (const item of dataItems) {
     items.push({
       id: item.infoCourse["_id"],
@@ -115,6 +153,7 @@ export const processing = async (req: Request, res: Response) => {
     await orderItem.save();
     amount += item.infoCourse["price_special"] * item.quantity;
   }
+
   orderDB["totalPayment"] = amount;
   await orderDB.save();
   const order = {
@@ -149,10 +188,24 @@ export const processing = async (req: Request, res: Response) => {
 
   try {
     const result = await axios.post(config.endpoint, null, { params: order });
-    res.redirect(result.data["orderurl"]);
+    console.log(result["data"]);
+    if (result["data"]["returncode"] == 1) {
+      res.json({
+        code: "200",
+        orderUrl:result["data"]["orderurl"],
+        messages: "Quá trình đang thanh toán!",
+      });
+    } else {
+      res.json({
+        code: 400,
+        messages: "Quá trình thanh toán bị lỗi!",
+      });
+    }
   } catch (error) {
-    console.error(error);
-    res.redirect("back");
+    res.status(500).json({
+      code: 500,
+      messages: "Quá trình thanh toán bị lỗi",
+    });
   }
 };
 export const callBack = async (req: Request, res: Response) => {
@@ -220,30 +273,34 @@ export const order = async (req: Request, res: Response) => {
         },
         { status: "paid" }
       );
-      const order=await Order.findOne({transId:apptransId});
+      const order = await Order.findOne({ transId: apptransId });
+      const orderId = order["id"];
       const items = await OrderItem.find({
-        orderId:order["id"]
+        orderId: orderId,
       });
-      
-      for(const item of items){
-        const courseId=item.courseId;
-        const course=await Course.findOne({_id:courseId}).select("title thumbnail");
-        item["infoCourse"]=course;
+
+      for (const item of items) {
+        const courseId = item.courseId;
+        const course = await Course.findOne({ _id: courseId }).select(
+          "title thumbnail"
+        );
+        item["infoCourse"] = course;
       }
-      const totalPriceCourse=parseInt(result["data"].amount);
-      const feeTrans=parseInt(result["data"].userfeeamount);
-      const totalPayment=totalPriceCourse+feeTrans;
-      order["totalPriceCourse"]=totalPriceCourse;
-      order["feeTrans"]=feeTrans;
-      order["totalPayment"]=totalPayment;
+      const totalPriceCourse = parseInt(result["data"].amount);
+      const feeTrans = parseInt(result["data"].userfeeamount);
+      const totalPayment = totalPriceCourse + feeTrans;
+      order["totalPriceCourse"] = totalPriceCourse;
+      order["feeTrans"] = feeTrans;
+      order["totalPayment"] = totalPayment;
       await order.save();
       res.render("client/pages/payment/order-success", {
         pageTitle: "Thông tin đơn hàng đã thanh toán",
-        items:items,
-        totalPayment:totalPayment,
-        totalPriceCourse:totalPriceCourse,
-        feeTrans:feeTrans,
-        appTransId:apptransId
+        items: items,
+        totalPayment: totalPayment,
+        totalPriceCourse: totalPriceCourse,
+        feeTrans: feeTrans,
+        appTransId: apptransId,
+        orderId: orderId,
       });
     }
   } catch (error) {

@@ -1,13 +1,18 @@
 const tableCart = document.querySelector("[table-cart]");
-const bodyTable = tableCart.querySelector("tbody");
+let bodyTable;
+if(tableCart){
+  bodyTable = tableCart.querySelector("tbody");
+}
 const totalPayment = document.querySelector("[total-payment]");
 const spanQuantityCart = document.querySelector("[quantity-cart]");
 //  show quantityCart
 const showQuantityCart = () => {
   const cart = JSON.parse(localStorage.getItem("cart"));
-  const quantityCart = cart.reduce((sum, item) => (sum += item.quantity), 0);
-  if (spanQuantityCart) {
-    spanQuantityCart.innerHTML = `(${quantityCart})`;
+  if (cart && cart.length > 0) {
+    const quantityCart = cart.reduce((sum, item) => (sum += item.quantity), 0);
+    if (spanQuantityCart) {
+      spanQuantityCart.innerHTML = `(${quantityCart})`;
+    }
   }
 };
 showQuantityCart();
@@ -43,6 +48,7 @@ const deleteItem = () => {
         console.log(existcart);
         localStorage.setItem("cart", JSON.stringify(existcart));
         fetchApiCart();
+        showQuantityCart();
       });
     });
   }
@@ -119,7 +125,8 @@ if (provinceSelect) {
           const html = districts.map((item) => {
             return `<option value=${item.Id}>${item.Name}</option>`;
           });
-          districtSelect.innerHTML = `<option value="">-- Chọn Quận/Huyện --</option>` + html.join("");
+          districtSelect.innerHTML =
+            `<option value="">-- Chọn Quận/Huyện --</option>` + html.join("");
           districtSelect.addEventListener("change", (e) => {
             const districtId = e.target.value;
             fetch(`http://localhost:3000/address/district/${districtId}`)
@@ -131,7 +138,9 @@ if (provinceSelect) {
                   const html = wards.map((item) => {
                     return `<option value=${item.Id}>${item.Name}</option>`;
                   });
-                  wardSelect.innerHTML = `<option value="">-- Chọn Phường/Xã --</option>` + html.join("");
+                  wardSelect.innerHTML =
+                    `<option value="">-- Chọn Phường/Xã --</option>` +
+                    html.join("");
                 }
               });
           });
@@ -141,13 +150,14 @@ if (provinceSelect) {
 }
 // end fetch address
 
-
 // form-order
-const formOrder=document.querySelector("[form-order]");
-if(formOrder){
-  formOrder.addEventListener("submit",(e)=>{
-    const inputCart=document.querySelector("input[cart]");
-    inputCart.value=localStorage.getItem("cart");
-  })
+const formOrder = document.querySelector("[form-order]");
+if (formOrder) {
+  formOrder.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const inputCart = document.querySelector("input[cart]");
+    inputCart.value = localStorage.getItem("cart");
+    formOrder.submit();
+  });
 }
 // end form-order

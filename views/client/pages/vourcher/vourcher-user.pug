@@ -14,13 +14,13 @@ block main
     div(class="alert alert-success hidden"
         show-alert-success
       ) 
-    div(class="row" )
+    div(class="row" all-vourcher)
       each vourcher in vourchers
         div(class="col-6" col-vourcher=vourcher.id)
-          .inner-vourcher
+          .inner-user-vourcher
             .inner-vourcher-thumbnail
               img(src=vourcher.thumbnail alt="Phiếu giảm giá")
-            .inner-vourcher-content
+            .inner-vourcher-user-content
               p
                 b #{vourcher.title}
               p
@@ -28,16 +28,13 @@ block main
               p
                 +formatDateTime(vourcher.expireAt)
             .inner-vourcher-button
-              if(vourcher.vourcherUser)
-                button(class="btn btn-secondary disabled" button-vourcher=vourcher.id) Lưu
-              else
-                button(class="btn btn-danger" button-vourcher=vourcher.id) Lưu
+              button(class="btn btn-danger" button-delete-vourcher=vourcher.id) Xóa
             .inner-vourcher-condition
               span(
                 class="badge badge-primary" data-toggle="tooltip" data-placement="top" title=`Đã mua ${vourcher.condition} sản phẩm` 
               ) Điều kiện
 block script
-  script(src="client/js/vourcher.js")
+  script(src="/client/js/vourcher.js")
   script(src="/client/js/cart.js")
       
   
