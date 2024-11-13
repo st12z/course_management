@@ -25,8 +25,8 @@ export const checkOut = async (req: Request, res: Response) => {
   const districtId = req.query.districtId;
   const wardId = req.query.wardId;
   const carts = req.query.cart ? JSON.parse(req.query.cart as string) : [];
-  if(!carts || carts.length==0){
-    req.flash("error","Bạn vui lòng thêm sản phẩm!");
+  if (!carts || carts.length == 0) {
+    req.flash("error", "Bạn vui lòng thêm sản phẩm!");
     res.redirect("back");
     return;
   }
@@ -65,16 +65,16 @@ export const checkOut = async (req: Request, res: Response) => {
     detailAddress: req.query.detailAddress,
   };
   // get vourcher
-  const userId=res.locals.user.id;
-  const vourcherUsers=await VourcherUser.find({
-    userId:userId,
-    deleted:false,
-    status:"active"
+  const userId = res.locals.user.id;
+  const vourcherUsers = await VourcherUser.find({
+    userId: userId,
+    deleted: false,
+    status: "active",
   });
-  const vourchers=[];
-  for(const vourcherUser of vourcherUsers){
-    const vourcher=await Vourcher.findOne({
-      _id:vourcherUser["vourcherId"]
+  const vourchers = [];
+  for (const vourcherUser of vourcherUsers) {
+    const vourcher = await Vourcher.findOne({
+      _id: vourcherUser["vourcherId"],
     });
     vourchers.push(vourcher);
   }
@@ -84,11 +84,17 @@ export const checkOut = async (req: Request, res: Response) => {
     dataUser: dataUser,
     items: items,
     totalPayment: totalPayment,
-    vourchers:vourchers
+    vourchers: vourchers,
   });
 };
 
 export const processing = async (req: Request, res: Response) => {
+  const carts = JSON.parse(req.body.carts as string);
+  if (!carts) {
+    req.flash("error", "Giỏ hàng trống!");
+    res.redirect("http://localhost:3000/cart");
+    return;
+  }
   const transId = Math.floor(Math.random() * 100000000);
   const apptransId = `${moment().format("YYMMDD")}_${transId}`;
   const embeddata = {
@@ -102,12 +108,24 @@ export const processing = async (req: Request, res: Response) => {
     },
     redirecturl: `http://localhost:3000/payment/order-status/${apptransId}`,
   };
-
-  const carts = JSON.parse(req.body.carts as string);
-  console.log(carts);
+  // update vourcher
+  const vourcherId = req.body.vourcherId;
+  await VourcherUser.updateOne({
+    transId: apptransId,
+  });
+  await Vourcher.updateOne(
+    {
+      _id: vourcherId,
+    },
+    {
+      $push: { used: res.locals.user.id },
+    }
+  );
+  // end update vourcher
+  
   const dataItems = [];
   const items = [];
-  let amount = 0;
+  let amount = req.body.amount;
   const dataOrder = {
     fullName: req.body.fullName,
     phone: req.body.phone,
@@ -120,6 +138,7 @@ export const processing = async (req: Request, res: Response) => {
   };
   const orderDB = new Order(dataOrder);
   await orderDB.save();
+
   for (const cart of carts) {
     const courseId = cart.courseId;
     const quantity = cart.quantity;
@@ -151,7 +170,6 @@ export const processing = async (req: Request, res: Response) => {
     };
     const orderItem = new OrderItem(dataOrderItem);
     await orderItem.save();
-    amount += item.infoCourse["price_special"] * item.quantity;
   }
 
   orderDB["totalPayment"] = amount;
@@ -192,7 +210,7 @@ export const processing = async (req: Request, res: Response) => {
     if (result["data"]["returncode"] == 1) {
       res.json({
         code: "200",
-        orderUrl:result["data"]["orderurl"],
+        orderUrl: `${result["data"]["orderurl"]}`,
         messages: "Quá trình đang thanh toán!",
       });
     } else {

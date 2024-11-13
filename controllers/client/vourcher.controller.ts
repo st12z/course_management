@@ -24,7 +24,7 @@ export const index = async (req: Request, res: Response) => {
       }
     }
   }
-  vourchers = vourchers.filter((item) => !vourcherIdHaved.includes(item.id));
+  vourchers = vourchers.filter((item) => !vourcherIdHaved.includes(item.id) && !item.used.includes(user.id));
   res.render("client/pages/vourcher/index", {
     pageTitle: "Trang vourcher",
     vourchers: vourchers,

@@ -11,6 +11,7 @@ const vourcherUserSchema = new mongoose.Schema(
       type: String,
       default: "active",
     },
+    transId:String
   },
   {
     timestamps: true,

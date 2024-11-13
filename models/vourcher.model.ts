@@ -13,7 +13,8 @@ const vourcherSchema = new mongoose.Schema(
     discountPercent:Number,
     thumbnail:String,
     expireAt:Date,
-    condition:Number
+    condition:Number,
+    used:[]
   },
   {
     timestamps: true,
