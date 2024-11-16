@@ -1,0 +1,30 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+block main
+  +box-head(pageTitle)
+  .container
+    .row.mb-4.inner-list-friend
+      .col-3
+        a(class="btn btn-primary" href="/friends") Danh sách bạn bè  
+          span(amount-friends=user.id) #{isFriends.length}
+      .col-3
+        a(class="btn btn-primary" href="/friends/not-friends") Người mà bạn có thể biết
+      .col-3
+        a(class="btn btn-primary" href="/friends/request") Lời mời đã gửi 
+          span(amount-request=user.id) #{requestFriends.length}
+      .col-3  
+        a(class="btn btn-primary" href="/friends/accept") Lời mời kết bạn 
+          span(amount-accept=user.id) #{acceptFriends.length}
+    div(class="row" inner-request-friends=user.id)
+      if(requestFriends && requestFriends.length)
+        each requestFriend in requestFriends
+          div(class="col-4" friend=requestFriend.id)
+            .inner-friend
+              .inner-friend-avatar
+                img(src=requestFriend.avatar)
+              .inner-friend-content
+                p #{requestFriend.fullName}
+                .inner-friend-button
+                  button(class="btn btn-secondary btn-sm"  button-cancel=requestFriend.id width="100px") Hủy
+block script
+  script(src="/client/js/friend.js")

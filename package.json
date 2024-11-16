@@ -27,6 +27,7 @@
     "mongoose": "^8.7.3",
     "mongoose-slug-updater": "^3.3.0",
     "pug": "^3.0.3",
+    "socket.io": "^4.8.1",
     "unidecode": "^1.1.0",
     "uuid": "^11.0.2"
   },

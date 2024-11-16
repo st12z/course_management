@@ -4,8 +4,8 @@ header.header
       .col-2
         .inner-logo
           a(href="/") 
-            img(src="https://img.freepik.com/free-vector/flat-design-library-logo-template_23-2149326889.jpg" alit="Logo")
-      .col-4
+            img(src="https://img.freepik.com/free-vector/flat-design-library-logo-template_23-2149326889.jpg" alt="Logo")
+      .col-5
         .inner-search
           form(
             form-search
@@ -36,21 +36,38 @@ header.header
               a(href="/cart") 
                 <i class="fa-solid fa-cart-shopping"></i> 
                 |Giỏ hàng <span quantity-cart>(0)</span>
-            li
-              a(href="/track-order")
-                |Tra cứu đơn hàng
-            li
-              a(href="/vourchers") Săn vourcher
             if(user)
               li
-                a(href=`/vourchers/${user.id}`) Vourcher của bạn
-            if(user)
-              li
-                img(src="" alt ="avatar")
-                a(href="/auth/logout") Đăng xuất
+                <div class="dropdown">
+                  <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                    img(src=user.avatar avatar alt ="avatar")
+                  </button>
+                  <div class="dropdown-menu">
+                    button(class="btn btn-secondary btn-sm") #{user.fullName}
+                    a(class="dropdown-item" href="/auth/logout") Đăng xuất
+                    <a class="dropdown-item" href="#">Thông tin tài khoản</a>
+                    <a class="dropdown-item" href="#">Đổi mật khẩu</a>
+                  </div>
+                </div>
             else
               li
                 a(href="/auth/login") Đăng nhập
               li
                 a(href="/auth/register") Đăng ký
+      div(class="col-12" friend)
+        .inner-list
+          ul
+            if(user)
+              li 
+                a(href="/friends") Bạn bè
+              li
+                a(href="/chats") Nhắn tin
+              li
+                a(href="/track-order")
+                  |Tra cứu đơn hàng
+              li
+                a(href="/vourchers") Săn vourcher
+              li
+                a(href=`/vourchers/${user.id}`) Vourcher của bạn
+    
     

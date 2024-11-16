@@ -1,3 +1,18 @@
+const spanQuantityCart = document.querySelector("[quantity-cart]");
+//  show quantityCart
+const showQuantityCart = () => {
+  const cart = JSON.parse(localStorage.getItem("cart"));
+  if (cart && cart.length > 0) {
+    const quantityCart = cart.reduce((sum, item) => (sum += item.quantity), 0);
+    if (spanQuantityCart) {
+      spanQuantityCart.innerHTML = `(${quantityCart})`;
+    }
+  }
+  else{
+    spanQuantityCart.innerHTML = `0`;
+  }
+};
+showQuantityCart();
 // ResetAlert
 const alerts = document.querySelectorAll(".alert");
 const hiddenAlert = () => {
@@ -15,7 +30,7 @@ if (buttonVourcher) {
       if (button.classList.contains("btn-danger")) {
         hiddenAlert();
         const vourcherId = button.getAttribute("button-vourcher");
-
+        console.log(vourcherId);
         const option = {
           method: "POST",
           headers: {

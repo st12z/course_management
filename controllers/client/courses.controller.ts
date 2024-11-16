@@ -52,7 +52,7 @@ export const detail = async (req: Request, res: Response) => {
       deleted: false,
       status: "active",
     }).select("fullName avatar createdAt");
-    infoUser["createdAt"] = formatDistance(
+    infoUser["reviewedAt"] = formatDistance(
       feedBack["createdAt"] as Date,
       new Date(),
       { addSuffix: true }
@@ -271,6 +271,7 @@ export const feedBackPost = async (req: Request, res: Response) => {
     infoUser: user,
     elapsedTime: elapsedTime,
     ratingAverage: ratingAvg,
+    avatar:user.avatar
   });
 };
 export const likeFeed = async (req: Request, res: Response) => {

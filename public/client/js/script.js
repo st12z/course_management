@@ -198,7 +198,7 @@ if (formReview) {
           div.innerHTML = `
           <div class="inner-info">
             <div class="inner-avatar">
-              <img review-avatar src="/client/images/avatar.jpg" width="50px"/>
+              <img review-avatar src="${data.avatar}" width="50px"/>
             </div>
             <div class="inner-name">
               <p>${data.infoUser.fullName}</p>

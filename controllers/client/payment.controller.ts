@@ -184,7 +184,7 @@ export const processing = async (req: Request, res: Response) => {
     amount: amount,
     description: `Lazada - Payment for the order ${transId}`,
     bankcode: "",
-    callback_url: "https://32c7-42-118-51-109.ngrok-free.app/payment/callback",
+    callback_url: "https://f27d-118-71-192-229.ngrok-free.app/payment/callback",
   };
 
   // appid|apptransid|appuser|amount|apptime|embeddata|item

@@ -220,10 +220,7 @@ a{
   align-items: center;
   justify-items: center;
 }
-[review-avatar]{
-  border-radius: 50%;
-  margin-right: 10px;
-}
+
 .inner-name{
   display:flex;
   flex-direction: column;
@@ -407,4 +404,72 @@ a{
 .inner-vourcher-user-content p{
   font-size: 18px;
   margin: 0;
+}
+[friend] {
+  display: flex;                /* Sử dụng Flexbox cho phần tử cha */
+}
+.inner-avatar{
+  aspect-ratio: 1/1;
+}
+[review-avatar]{
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+  object-fit: cover;
+}
+[avatar]{
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+  object-fit: cover;
+}
+.inner-friend{
+  padding: 5px;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+}
+.inner-friend .inner-friend-avatar{
+  aspect-ratio: 1/1;
+  margin-right: 20px;
+}
+.inner-friend .inner-friend-avatar img{
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit:cover;
+}
+
+[friend]{
+  width: 500px;
+}
+.inner-friend-content{
+  display:flex;
+  flex-direction: column;
+}
+.inner-friend-content p{
+  font-weight: 700;
+}
+.inner-friend-content .btn{
+  width: 120px;
+}
+.inner-list-friend span{
+  padding: 3px;
+  border-radius: 3px;
+  font-weight: 700;
+  color:black;
+  background-color: white;
+}
+.inner-friend-button{
+  display:flex;
+}
+.inner-friend-button .btn{
+  margin-right: 5px;
+}
+.inner-friend-button .hidden{
+  display:none;
 }

@@ -1,0 +1,32 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+block main
+  +box-head(pageTitle)
+  .container
+    .row.mb-4.inner-list-friend
+      .col-3
+        a(class="btn btn-primary" href="/friends") Danh sách bạn bè  
+          span(amount-friends=user.id) #{isFriends.length}
+      .col-3
+        a(class="btn btn-primary" href="/friends/not-friends") Người mà bạn có thể biết
+      .col-3
+        a(class="btn btn-primary" href="/friends/request") Lời mời đã gửi 
+          span(amount-request=user.id) #{requestFriends.length}
+      .col-3  
+        a(class="btn btn-primary" href="/friends/accept") Lời mời kết bạn 
+          span(amount-accept=user.id) #{acceptFriends.length}
+    div(class="row" inner-not-friends=user.id)
+      if(notFriends && notFriends.length)
+        each notFriend in notFriends
+          div(class="col-4" friend=notFriend.id)
+            .inner-friend
+              .inner-friend-avatar
+                img(src=notFriend.avatar)
+              .inner-friend-content
+                p #{notFriend.fullName}
+                .inner-friend-button
+                  button(class="btn btn-primary btn-sm" button-request=notFriend.id width="80px") Kết bạn
+                  button(class="btn btn-secondary btn-sm hidden" disabled button-accepted=notFriend.id  width="100px") Đã chấp nhận
+                  button(class="btn btn-secondary btn-sm hidden" disabled button-refused=notFriend.id  width="100px") Đã từ chối
+block script
+  script(src="/client/js/friend.js")

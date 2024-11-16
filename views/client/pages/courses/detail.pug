@@ -134,10 +134,10 @@ block main
               div(class="person-review" person-review=feedback.id)
                 div(class="inner-info")
                   div(class="inner-avatar")
-                    img(review-avatar src="/client/images/avatar.jpg" width="50px")
+                    img(review-avatar src=user.avatar )
                   div(class="inner-name")
                     p #{feedback.infoUser.fullName}
-                    p #{feedback.infoUser.createdAt}
+                    p #{feedback.infoUser.reviewedAt}
                 div(class="inner-rating" reviewed-rating=feedback.rating)
                   <span reviewed-star class="fa fa-star" data-value="1" ></span>
                   <span reviewed-star class="fa fa-star" data-value="2" ></span>
