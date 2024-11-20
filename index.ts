@@ -12,6 +12,7 @@ import cors from 'cors';
 import moment from "moment";
 import http from "http";
 import {Server} from "socket.io";
+import passport from 'passport'; // Cài đặt Passport
 dotenv.config();
 database.connect();
 
@@ -29,6 +30,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser("AB"));
 app.use(session({cookie:{maxAge:60000}}));
 app.use(flash());
+app.use(passport.initialize());
 app.use(bodyParser.json());
 app.use(cors());
 app.locals.moment=moment;

@@ -1,3 +1,4 @@
+
 const amountLike = document.querySelector("[amount-like]");
 const amountTym = document.querySelector("[amount-tym]");
 const fetchApiPOST = (slug, api, type) => {

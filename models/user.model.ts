@@ -23,6 +23,7 @@ const userSchema =new mongoose.Schema({
     slug: "fullName",
     unique:true,
   },
+  refreshTokens:[]
 },{
   timestamps:true
 });

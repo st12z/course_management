@@ -20,6 +20,7 @@ export const clienRoutes=(app:Express)=>{
   app.use("/",homeRoutes),
   app.use("/topics",topicRoutes),
   app.use("/courses",courseRoutes),
+  
   app.use("/favorite-songs",authMiddlware.authMiddleware,favoriteCoursesRoutes),
   app.use("/cart",cartRoutes),
   app.use("/try",tryLearningRoutes),
@@ -31,4 +32,5 @@ export const clienRoutes=(app:Express)=>{
   app.use("/vourchers",vourcherRoutes),
   app.use("/friends",authMiddlware.authMiddleware,friendRoutes)
   app.use("/chats",authMiddlware.authMiddleware,chatRoutes)
+ 
 }
