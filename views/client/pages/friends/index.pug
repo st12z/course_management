@@ -25,7 +25,7 @@ block main
               .inner-friend-content
                 p #{isFriend.fullName}
                 .inner-friend-button
-                  a(class="btn btn-primary btn-sm" href=`/chat/${isFriend.id}` button-chat=isFriend.id width="80px") Nhắn tin 
+                  a(class="btn btn-primary btn-sm" href=`/chats/rooms/${isFriend.roomChatId}` button-chat=isFriend.roomChatId width="80px") Nhắn tin 
                   button(class="btn btn-primary btn-sm"  button-delete=isFriend.id width="80px") Xóa bạn bè 
                   button(class="btn btn-secondary btn-sm hidden"  button-deleted=isFriend.id width="80px") Đã xóa
 block script

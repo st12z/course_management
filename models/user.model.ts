@@ -17,7 +17,12 @@ const userSchema =new mongoose.Schema({
   },
   requestFriends:[],
   acceptFriends:[],
-  isFriends:[]
+  isFriends:[],
+  slug: { 
+    type: String, 
+    slug: "fullName",
+    unique:true,
+  },
 },{
   timestamps:true
 });

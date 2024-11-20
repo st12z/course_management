@@ -7,8 +7,7 @@ const showQuantityCart = () => {
     if (spanQuantityCart) {
       spanQuantityCart.innerHTML = `(${quantityCart})`;
     }
-  }
-  else{
+  } else {
     spanQuantityCart.innerHTML = `0`;
   }
 };
@@ -30,6 +29,9 @@ if (buttonVourcher) {
       if (button.classList.contains("btn-danger")) {
         hiddenAlert();
         const vourcherId = button.getAttribute("button-vourcher");
+        button.classList.remove("btn-danger");
+        button.classList.add("btn-secondary");
+        button.classList.add("disabled");
         console.log(vourcherId);
         const option = {
           method: "POST",
@@ -50,16 +52,13 @@ if (buttonVourcher) {
         if (data.code == 400) {
           setTimeout(() => {
             alertError.classList.add("hidden");
-          }, 5000);
+          }, 3000);
           alertError.classList.remove("hidden");
           alertError.innerHTML = data.messages;
         } else {
-          button.classList.remove("btn-danger");
-          button.classList.add("btn-secondary");
-          button.classList.add("disabled");
           setTimeout(() => {
             alertSuccess.classList.add("hidden");
-          }, 5000);
+          }, 3000);
           alertSuccess.classList.remove("hidden");
           alertSuccess.innerHTML = data.messages;
         }
@@ -75,7 +74,7 @@ const allVourcher = document.querySelector("[all-vourcher]");
 const buttonDeletes = document.querySelectorAll("[button-delete-vourcher]");
 if (buttonDeletes) {
   buttonDeletes.forEach((button) => {
-    button.addEventListener("click", async() => {
+    button.addEventListener("click", async () => {
       const vourcherId = button.getAttribute("button-delete-vourcher");
       const colVourcher = document.querySelector(
         `[col-vourcher="${vourcherId}"]`
@@ -100,14 +99,14 @@ if (buttonDeletes) {
       if (data.code == 400) {
         setTimeout(() => {
           alertError.classList.add("hidden");
-        }, 5000);
+        }, 3000);
         alertError.classList.remove("hidden");
         alertError.innerHTML = data.messages;
       } else {
         allVourcher.removeChild(colVourcher);
         setTimeout(() => {
           alertSuccess.classList.add("hidden");
-        }, 5000);
+        }, 3000);
         alertSuccess.classList.remove("hidden");
         alertSuccess.innerHTML = data.messages;
       }

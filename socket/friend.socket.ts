@@ -1,5 +1,6 @@
 import { Response } from "express";
 import User from "../models/user.model";
+import RoomChat from "../models/room-chat.model";
 export const friendSocket = (res: Response) => {
   _io.once("connection", (socket) => {
     const user = res.locals.user;
@@ -143,9 +144,31 @@ export const friendSocket = (res: Response) => {
             $pull: { requestFriends: userAId },
           }
         );
-        
+        // Thêm vào phòng chat
+        const roomData = {
+          typeRoom: "friend",
+          users: [
+            {
+              userId: userAId,
+              role: "admin",
+            },
+            {
+              userId: userBId,
+              role: "admin",
+            },
+          ],
+        };
+        const roomChat = new RoomChat(roomData);
+        await roomChat.save();
+        const roomChatFind = await RoomChat.findOne({
+          typeRoom: "friend",
+          $and: [
+            { users: { $elemMatch: { userId: userAId, role: "admin" } } },
+            { users: { $elemMatch: { userId: userBId, role: "admin" } } },
+          ],
+        });
         const userA = await User.findOne({ _id: userAId });
-        const userB= await User.findOne({ _id: userBId });
+        const userB = await User.findOne({ _id: userBId });
         const acceptFriendsOfA = userA.acceptFriends;
         const requestFriendsOfB = userB.requestFriends;
         const isFriendOfA = userA.isFriends;
@@ -168,11 +191,11 @@ export const friendSocket = (res: Response) => {
         _io.emit("SERVER_RETURN_ISFRIEND", {
           infoUser: infoUserA,
           userBId: userBId,
-          lengthIsFriendsOfA: isFriendOfA.length ,
+          lengthIsFriendsOfA: isFriendOfA.length,
           lengthIsFriendsOfB: isFriendOfB.length,
+          roomChatId:roomChatFind["id"] ? roomChatFind["id"]:null
         });
       }
-
     });
     socket.on("CLIENT_SEND_REFUSE", async (userBId) => {
       const userAinB = await User.findOne({
@@ -211,33 +234,39 @@ export const friendSocket = (res: Response) => {
         {
           lengthRequestFriends: userB.requestFriends.length,
           userBId: userB.id,
-          userAId:userAId
+          userAId: userAId,
         }
       );
     });
     socket.on("CLIENT_SEND_DELETE", async (userBId) => {
       console.log(userBId);
-      const userAinB=await User.findOne({
-        _id:userAId,
-        isFriends:userBId
+      const userAinB = await User.findOne({
+        _id: userAId,
+        isFriends: userBId,
       });
-      const userBinA=await User.findOne({
-        _id:userBId,
-        isFriends:userAId
+      const userBinA = await User.findOne({
+        _id: userBId,
+        isFriends: userAId,
       });
-      if(userAinB && userBinA){
-        await User.updateOne({_id:userAId},{$pull:{isFriends:userBId}});
-        await User.updateOne({_id:userBId},{$pull:{isFriends:userAId}});
-        const userA=await User.findOne({_id:userAId});
-        const userB=await User.findOne({_id:userBId});
-        const lengthIsFriendsOfA=userA.isFriends.length;
-        const lengthIsFriendsOfB=userB.isFriends.length;
-        _io.emit("SERVER_RETURN_DELETE",{
-          lengthIsFriendsOfA:lengthIsFriendsOfA,
-          lengthIsFriendsOfB:lengthIsFriendsOfB,
-          userAId:userAId,
-          userBId:userBId
-        })
+      if (userAinB && userBinA) {
+        await User.updateOne(
+          { _id: userAId },
+          { $pull: { isFriends: userBId } }
+        );
+        await User.updateOne(
+          { _id: userBId },
+          { $pull: { isFriends: userAId } }
+        );
+        const userA = await User.findOne({ _id: userAId });
+        const userB = await User.findOne({ _id: userBId });
+        const lengthIsFriendsOfA = userA.isFriends.length;
+        const lengthIsFriendsOfB = userB.isFriends.length;
+        _io.emit("SERVER_RETURN_DELETE", {
+          lengthIsFriendsOfA: lengthIsFriendsOfA,
+          lengthIsFriendsOfB: lengthIsFriendsOfB,
+          userAId: userAId,
+          userBId: userBId,
+        });
       }
     });
   });

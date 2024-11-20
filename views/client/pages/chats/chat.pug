@@ -1,0 +1,50 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+include ../../mixins/alert.pug
+block main
+  .container.mt-2
+    .row.justify-content-center
+      .col-8
+        div(class="inner-chat-room" userId=user.id)
+          each chat in chats
+            if(chat.userId!=user.id)
+              .inner-incoming
+                if(chat.content || chat.images)
+                  .inner-info 
+                    p #{chat.infoFriend.fullName}
+                if(chat.content)
+                  .inner-content
+                    img(src=chat.infoFriend.avatar) 
+                    p #{chat.content}
+                if(chat.images)
+                  .inner-images
+                    each image in chat.images
+                      img(src=image)
+            else
+              .inner-outgoing
+                if(chat.content)
+                  .inner-content
+                    p #{chat.content}
+                if(chat.images)
+                  .inner-images
+                    each image in chat.images
+                      img(src=image)
+        .inner-send-message
+          input(
+            type="text"
+            class="form-control"
+            send-content
+          )  
+          i(class="fa-regular fa-face-smile mr-2 ml-2" button-icon)
+          <i class="fa-regular fa-image" send-images></i>
+          i(class="fa-regular fa-paper-plane" send-message=roomChatId)  
+          emoji-picker(div class="hidden")
+          <div class="custom-file-container hidden" data-upload-id="my-unique-id"></div>          
+          
+          
+block script
+  script(type="module"  src="https://unpkg.com/file-upload-with-preview/dist/index.js")
+  script( type="module" src="/client/js/chat.js")
+              
+
+        

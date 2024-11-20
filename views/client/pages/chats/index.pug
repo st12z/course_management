@@ -1,0 +1,38 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+include ../../mixins/alert.pug
+block main
+  +box-head(pageTitle)
+  .container 
+    .row
+      .col-4
+        .inner-list-chat
+          .inner-search
+            <i class="fa-solid fa-magnifying-glass"></i>
+            input(
+              type="text"
+              name="title"
+              class="form-control"
+              placeHolder="Tìm kiếm trên đoạn chat..."
+              search-friend
+            )
+          .inner-room-chat
+            if(latestMessages)
+              each latestMessage in latestMessages
+                a(href=`/chats/rooms/${latestMessage.message.roomChatId}`)
+                  .inner-room
+                    .inner-avatar
+                      img(src=latestMessage.infoFriend.avatar)
+                    .inner-message
+                      p #{latestMessage.infoFriend.lastName}
+                      if(latestMessage.message.userId==user.id)
+                        p(class="new-message")  Bạn: #{latestMessage.message.content}
+                      else
+                        p(class="new-message")  #{latestMessage.message.content}
+            
+
+block script
+  script( src="/client/js/search-friend.js")
+              
+
+        

@@ -220,6 +220,7 @@ socket.on("SERVER_RETURN_ISFRIEND", (data) => {
   const userAId = data.userAId;
   const lengthIsFriendsOfA = data.lengthIsFriendsOfA;
   const lengthIsFriendsOfB = data.lengthIsFriendsOfB;
+  const roomChatId=data.roomChatId;
   const innerListFriends = document.querySelector("[inner-list-friends]");
   if (innerListFriends) {
     const userIdInner = innerListFriends.getAttribute("inner-list-friends");
@@ -237,7 +238,7 @@ socket.on("SERVER_RETURN_ISFRIEND", (data) => {
           <div class="inner-friend-content">
             <p> ${infoUser.fullName}</p>
             <div class="inner-friend-button">
-              <button class="btn btn-primary btn-sm" button-chat=${infoUser._id} width="80px">Nhắn tin</button>
+              <button class="btn btn-primary btn-sm" href=/chats/rooms/${roomChatId} button-chat=${roomChatId} width="80px">Nhắn tin</button>
               <button class="btn btn-primary btn-sm" button-delete=${infoUser._id} width="80px">Xóa bạn bè</button>
               <button class="btn btn-secondary btn-sm hidden" button-deleted=${infoUser._id} width="80px">Đã xóa</button>
             </div>
