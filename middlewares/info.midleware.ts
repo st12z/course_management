@@ -22,12 +22,10 @@ export const infoMiddleware = async (
         status: "active",
         deleted: false,
       }).select("-password");
-
-      if (!user) {
-        return res.redirect("/auth/login");
+      if (user) {
+        res.locals.user = user;
+        return next();
       }
-      res.locals.user = user;
-      return next();
     } catch (error) {
       if (error.name === "TokenExpiredError") {
         console.log("Access token đã hết hạn, đang kiểm tra refresh_token...");
@@ -49,13 +47,13 @@ export const infoMiddleware = async (
       }).select("-password");
 
       if (!user) {
-        return res.redirect("/auth/login");
+        return res.redirect("/");
       }
       const newAccessToken = generateAccessToken(user);
       res.cookie("access_token", newAccessToken, {
         httpOnly: true,
         secure: true,
-        maxAge: 15 * 60 * 1000, // 15 phút
+        maxAge: 30 * 60 * 1000, // 15 phút
       });
 
       res.locals.user = user;

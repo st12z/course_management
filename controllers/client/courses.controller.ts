@@ -69,8 +69,8 @@ export const detail = async (req: Request, res: Response) => {
 
 export const like = async (req: Request, res: Response) => {
   const slugCourse = req.params.slugCourse;
-  const token = req.cookies.token;
-  if (!token) {
+  const access_token = req.cookies.access_token;
+  if (!access_token) {
     res.json({
       code:400,
       messages:"Bạn cần đăng nhập!"
@@ -102,8 +102,8 @@ export const like = async (req: Request, res: Response) => {
 };
 export const unlike = async (req: Request, res: Response) => {
   const slugCourse = req.params.slugCourse;
-  const token = req.cookies.token;
-  if (!token) {
+  const access_token = req.cookies.access_token;
+  if (!access_token) {
     res.json({
       code:400,
       messages:"Bạn cần đăng nhập!"
@@ -136,8 +136,8 @@ export const unlike = async (req: Request, res: Response) => {
 };
 export const tym = async (req: Request, res: Response) => {
   const slugCourse = req.params.slugCourse;
-  const token = req.cookies.token;
-  if (!token) {
+  const access_token = req.cookies.access_token;
+  if (!access_token) {
     res.json({
       code:400,
       messages:"Bạn cần đăng nhập!"
@@ -184,8 +184,8 @@ export const tym = async (req: Request, res: Response) => {
 };
 export const untym = async (req: Request, res: Response) => {
   const slugCourse = req.params.slugCourse;
-  const token = req.cookies.token;
-  if (!token) {
+  const access_token = req.cookies.access_token;
+  if (!access_token) {
     res.json({
       code:400,
       messages:"Bạn cần đăng nhập!"
@@ -222,8 +222,8 @@ export const untym = async (req: Request, res: Response) => {
 };
 export const feedBackPost = async (req: Request, res: Response) => {
   const slugCourse = req.params.course;
-  const token = req.cookies.token;
-  if (!token) {
+  const access_token = req.cookies.access_token;
+  if (!access_token) {
     res.json({
       code:400,
       messages:"Bạn cần đăng nhập!"
@@ -275,8 +275,8 @@ export const feedBackPost = async (req: Request, res: Response) => {
   });
 };
 export const likeFeed = async (req: Request, res: Response) => {
-  const token = req.cookies.token;
-  if (!token) {
+  const access_token = req.cookies.access_token;
+  if (!access_token) {
     res.json({
       code:400,
       messages:"Bạn cần đăng nhập!"
@@ -303,8 +303,8 @@ export const likeFeed = async (req: Request, res: Response) => {
   });
 };
 export const unlikeFeed = async (req: Request, res: Response) => {
-  const token = req.cookies.token;
-  if (!token) {
+  const access_token = req.cookies.access_token;
+  if (!access_token) {
     res.json({
       code:400,
       messages:"Bạn cần đăng nhập!"
@@ -335,7 +335,8 @@ export const deleteFeed = async (req: Request, res: Response) => {
   const feedBack = await FeedBack.findOne({
     _id: feedBackId,
   });
-  const courseId = feedBack.courseId;
+  if(feedBack){
+    const courseId = feedBack.courseId;
   await FeedBack.deleteOne({ _id: feedBackId });
   const feedBacks = await FeedBack.find({
     courseId: courseId,
@@ -353,6 +354,13 @@ export const deleteFeed = async (req: Request, res: Response) => {
     feedBackId: feedBackId,
     ratingAverage: ratingAverage,
   });
+  }
+  else{
+    res.json({
+      code:401,
+      messages:"Không tìm thấy!"
+    })
+  }
 };
 export const editFeed = async (req: Request, res: Response) => {
   const feedBackId = req.params.id;

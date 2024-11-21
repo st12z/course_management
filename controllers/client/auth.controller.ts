@@ -7,6 +7,11 @@ import {
   generateRefreshToken,
 
 } from "../../helpers/generateToken";
+import { generateCode } from "../../helpers/generateCode";
+import OTP from "../../models/otp.model";
+import { sendEmail } from "../../helpers/sendEmail";
+import { sub } from "date-fns";
+import { isTypedArray } from "util/types";
 
 export const register = async (req: Request, res: Response) => {
   res.render("client/pages/auth/register", {
@@ -104,5 +109,73 @@ export const logout = async (req: Request, res: Response) => {
     _id:res.locals.user.id,
     $pull:{refreshTokens:refresh_token}
   });
+  res.redirect("/auth/login");
+};
+export const forgotPassword = async (req: Request, res: Response) => {
+  res.render("client/pages/auth/forgot-password",{
+    paegTitle:"Quên mật khẩu"
+  })
+};
+export const forgotPasswordPost = async (req: Request, res: Response) => {
+  const email=req.body.email;
+  const user=await User.findOne({email:email,deleted:false,status:"active"}).select("-password");
+  if(!user){
+    req.flash("error","Email không tồn tại!");
+    res.redirect("back");
+  }
+  const otpCode=generateCode(6);
+  const dataOTP={
+    userId:user.id,
+    email:user.email,
+    otp:otpCode,
+    expireAt:new Date(Date.now() + 3*60*1000)
+  };
+  const otp=new OTP(dataOTP);
+  await otp.save();
+  const subject="Mã OTP";
+  const html=`<p><b>Mã OTP của bạn là: </b>${otpCode}. Mã có thời hạn trong 3 phút.</p>`;
+  sendEmail(subject,html);
+  res.redirect(`/auth/otp/${email}`)
+};
+export const otp = async (req: Request, res: Response) => {
+  const email=req.params.email;
+  res.render("client/pages/auth/otp",{
+    pageTitle:"Nhập mã OTP",
+    email:email
+  })
+};
+export const otpPost = async (req: Request, res: Response) => {
+  const email=req.body.email;
+  const otp=req.body.otp;
+  const Otp=await OTP.findOne({
+    email:email,
+    otp:otp
+  });
+  if(!Otp){
+    req.flash("error","Mã OTP không hợp lệ!");
+    res.redirect("back");
+    return;
+  }
+  res.redirect(`/auth/reset-password/${email}`);
+};
+export const resetPassword = async (req: Request, res: Response) => {
+  const email=req.params.email;
+  res.render("client/pages/auth/reset-password",{
+    pageTitle:"Nhập mã OTP",
+    email:email
+  })
+};
+export const resetPasswordPost = async (req: Request, res: Response) => {
+  const email=req.params.email;
+  const password1=req.body.password1;
+  const password2=req.body.password2;
+  if(password1!=password2){
+    req.flash("error","Mật khẩu không trùng!");
+    res.redirect("back");
+    return;
+  }
+  await User.updateOne({
+    email:email
+  },{password: await hashPassword(password1)});
   res.redirect("/auth/login");
 };

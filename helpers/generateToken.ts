@@ -6,12 +6,12 @@ export const generateAccessToken=(user)=>{
     fullName:user.fullName,
     email:user.email,
   }
-  return jwt.sign(payload,process.env.ACCESS_TOKEN_SECRET,{expiresIn:'15s'});
+  return jwt.sign(payload,process.env.ACCESS_TOKEN_SECRET,{expiresIn:'30m'});
 }
 export const generateRefreshToken=(user)=>{
   const payload={
     fullName:user.fullName,
     email:user.email,
   }
-  return jwt.sign(payload,process.env.REFRESH_TOKEN_SECRET,{expiresIn:'7d'});
+  return jwt.sign(payload,process.env.REFRESH_TOKEN_SECRET,{expiresIn:'1d'});
 }

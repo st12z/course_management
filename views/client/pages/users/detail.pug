@@ -1,0 +1,81 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+include ../../mixins/alert.pug
+
+block main
+  +alert-success(5000)
+  +alert-error(5000)
+  +box-head(pageTitle)
+  .container
+    .row
+      .col-3
+        .inner-user-image
+          <div class="card">
+            <div class="card-header">
+              | Ảnh
+            </div>
+            <div class="card-body">
+              .inner-avatar
+                img(src=user.avatar image-preview)
+              .inner-upload
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+            </div>
+          </div>
+      .col-9
+        .inner-user-info
+          <div class="card">
+            <div class="card-header">
+              | Thông tin người dùng
+            </div>
+            <div class="card-body">
+              form(
+                method="POST"
+                action="/user/change-user?_method=PATCH"
+                enctype="multipart/form-data"
+              )
+                div(class="form-group")
+                  label(for="email") Email 
+                  input(
+                    type="text"
+                    class="form-control"
+                    name="email"
+                    id="email"
+                    value=user.email
+                    required
+                  )
+                div(class="form-group")
+                  label(for="fullName") Họ và tên
+                  input(
+                    type="text"
+                    class="form-control"
+                    name="fullName"
+                    id="fullName"
+                    value=user.fullName
+                    required
+                  )
+                div(class="form-group")
+                  input(
+                    type="file"
+                    class="form-control"
+                    hidden
+                    name="avatar"
+                    accept="images/*"
+                    upload-image
+                  )
+                div(class="form-group")
+                  button(
+                    class="btn btn-primary"
+                    type="submit"
+                  ) Cập nhật
+            </div>
+          </div>
+block script
+  script(src="/client/js/user.js")
+
+
+
+
+          
+            
+
+        

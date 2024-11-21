@@ -15,6 +15,7 @@ import { trackOrderRoutes } from "./track-order.route"
 import { vourcherRoutes } from "./vourcher.route"
 import { friendRoutes } from "./friends.route"
 import { chatRoutes } from "./chat.route"
+import { userRoutes } from "./user.route"
 export const clienRoutes=(app:Express)=>{
   app.use(infoMiddleware);
   app.use("/",homeRoutes),
@@ -32,5 +33,6 @@ export const clienRoutes=(app:Express)=>{
   app.use("/vourchers",vourcherRoutes),
   app.use("/friends",authMiddlware.authMiddleware,friendRoutes)
   app.use("/chats",authMiddlware.authMiddleware,chatRoutes)
+  app.use("/user",authMiddlware.authMiddleware,userRoutes)
  
 }

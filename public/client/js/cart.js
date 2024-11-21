@@ -1,6 +1,6 @@
 const tableCart = document.querySelector("[table-cart]");
 let bodyTable;
-if(tableCart){
+if (tableCart) {
   bodyTable = tableCart.querySelector("tbody");
 }
 const totalPayment = document.querySelector("[total-payment]");
@@ -64,7 +64,12 @@ const fetchApiCart = () => {
     },
     body: cart,
   })
-    .then((res) => res.json())
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error("Giỏ hàng bị trông!");
+      }
+      return res.json();
+    })
     .then((data) => {
       if (data.code == 200) {
         console.log(data);
@@ -105,6 +110,9 @@ const fetchApiCart = () => {
         deleteItem();
         showQuantityCart();
       }
+    })
+    .catch((error) => {
+      console.error(error);
     });
 };
 fetchApiCart();

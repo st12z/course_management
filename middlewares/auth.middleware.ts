@@ -24,13 +24,13 @@ export const authMiddleware = async (
         deleted: false,
       }).select("-password");
       if (!user) {
-        res.redirect("/auth/login");
+        res.redirect("/");
         return;
       }
       res.locals.user=user;
       next();
     } catch (error) {
-      res.redirect("/auth/login");
+      res.redirect("/");
       return;
     }
   }

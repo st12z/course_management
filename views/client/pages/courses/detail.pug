@@ -134,7 +134,7 @@ block main
               div(class="person-review" person-review=feedback.id)
                 div(class="inner-info")
                   div(class="inner-avatar")
-                    img(review-avatar src=user.avatar )
+                    img(review-avatar src=feedback.infoUser.avatar )
                   div(class="inner-name")
                     p #{feedback.infoUser.fullName}
                     p #{feedback.infoUser.reviewedAt}

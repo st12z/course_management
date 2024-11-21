@@ -45,8 +45,8 @@ header.header
                   <div class="dropdown-menu">
                     button(class="btn btn-secondary btn-sm") #{user.fullName}
                     a(class="dropdown-item" href="/auth/logout") Đăng xuất
-                    <a class="dropdown-item" href="#">Thông tin tài khoản</a>
-                    <a class="dropdown-item" href="#">Đổi mật khẩu</a>
+                    <a class="dropdown-item" href="/user/detail">Thông tin tài khoản</a>
+                    <a class="dropdown-item" href="/user/change-password">Đổi mật khẩu</a>
                   </div>
                 </div>
             else
@@ -64,7 +64,7 @@ header.header
                 a(href="/chats") Nhắn tin
               li
                 a(href="/track-order")
-                  |Tra cứu đơn hàng
+                  |Tra cứu khóa học
               li
                 a(href="/vourchers") Săn vourcher
               li

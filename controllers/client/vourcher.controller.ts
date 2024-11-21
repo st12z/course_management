@@ -32,7 +32,7 @@ export const index = async (req: Request, res: Response) => {
   });
 };
 export const saveVourcher = async (req: Request, res: Response) => {
-  if (!req.cookies.token) {
+  if (!req.cookies.access_token) {
     res.json({
       code: 400,
       messages: "Bạn cần đăng nhập để lưu vourcher!",

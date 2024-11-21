@@ -1,4 +1,3 @@
-
 const amountLike = document.querySelector("[amount-like]");
 const amountTym = document.querySelector("[amount-tym]");
 const fetchApiPOST = (slug, api, type) => {
@@ -455,30 +454,37 @@ const actionReview = () => {
   // end edit-review
 };
 // end actionReview
-actionReview();
 
-// form-search
+// cache data
 const formSearch = document.querySelector("[form-search]");
-if (formSearch) {
-  const innerSuggest = formSearch.querySelector(".inner-suggest");
-  const inputSearch = formSearch.querySelector("input");
-  inputSearch.addEventListener("keyup", (e) => {
-    const keyword = e.target.value;
-    if (keyword && keyword != "") {
-      const api = `http://localhost:3000/search/suggest?keyword=${keyword}`;
-      fetch(api)
-        .then((res) => {
-          if (!res) {
-            throw new Error("Lỗi truyền!");
-          }
-          return res.json();
-        })
-        .then((data) => {
-          const courseSuggest = data.courseSuggest;
-          if (data.courseSuggest.length > 0) {
-            innerSuggest.classList.add("active");
-            const HTML = courseSuggest.map((item) => {
-              return `
+const innerSuggest = formSearch.querySelector(".inner-suggest");
+const inputSearch = formSearch.querySelector("input");
+const searchData = {};
+const fetchApiCourse = async (keyword) => {
+  if (searchData[keyword]) {
+    renderData(searchData[keyword]);
+    return;
+  }
+  try {
+    const result = await fetch(
+      `http://localhost:3000/search/suggest?keyword=${keyword}`
+    );
+    if (!result.ok) {
+      throw new Error(`HTTP error! Status: ${result.status}`);
+    }
+    const data = await result.json();
+    searchData[keyword] = data;
+    renderData(data);
+  } catch (error) {
+    console.error("Lỗi : ", error);
+  }
+};
+const renderData = (data) => {
+  const courseSuggest = data.courseSuggest;
+  if (data.courseSuggest.length > 0) {
+    innerSuggest.classList.add("active");
+    const HTML = courseSuggest.map((item) => {
+      return `
               <a href="/courses/detail/${item.slug}">
                 <div class="inner-item"> 
                   <div class="inner-thumbnail">
@@ -490,24 +496,38 @@ if (formSearch) {
                 </div>
               </a>
           `;
-            });
-            innerSuggest.innerHTML = HTML.join("");
-          } else {
-            innerSuggest.innerHTML = "";
-            innerSuggest.classList.remove("active");
-          }
-        })
-        .catch((error) => {
-          console.log(error.message);
-        });
+    });
+    innerSuggest.innerHTML = HTML.join("");
+  } else {
+    innerSuggest.innerHTML = "";
+    innerSuggest.classList.remove("active");
+  }
+};
+// end cache data
+
+const debounce = (callback, delay) => {
+  let timeout;
+  return (...args) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      callback(...args, delay);
+    }, delay);
+  };
+};
+// form-search
+
+if (formSearch) {
+  const handleSearch = debounce(async (e) => {
+    const keyword = e.target.value.trim();
+    if (keyword && keyword != "") {
+      fetchApiCourse(keyword);
     } else {
       innerSuggest.innerHTML = "";
       innerSuggest.classList.remove("active");
     }
-  });
+  }, 300);
+  inputSearch.addEventListener("keyup", handleSearch);
 }
 
 // end form-search
-
-
-
+actionReview();

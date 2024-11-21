@@ -43,6 +43,11 @@ block main
                     img(src=item.infoCourse.thumbnail width="200px" alt="Logo")
                   td #{item.infoCourse.title}
                   td #{item.codeActive}
+                  td 
+                    if(item.status=="inactive")
+                      | Chưa kích hoạt
+                    else 
+                      | Đã kích hoạt
           <div class="card">
             <h5 class="card-header">Thông tin thanh toán</h5>
             <div class="card-body">

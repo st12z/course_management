@@ -7,9 +7,9 @@ block main
   .container.my-5
     .row.justify-content-center
       .col-8
-        h1(class="text-center") Đăng nhập
+        h1(class="text-center") Nhập mã OTP
         form(
-          action="/auth/login"
+          action="/auth/otp"
           method="POST"
         )
           div(class="form-group")
@@ -19,21 +19,19 @@ block main
               class="form-control"
               id="email"
               name="email"
-              required
+              value=email 
+              readonly
             )
           div(class="form-group")
-            label(for="password") Mật khẩu
+            label(for="otp") Mã OTP
             input(
-              type="password"
+              type="text"
               class="form-control"
-              id="password"
-              name="password"
-              required
+              id="otp"
+              name="otp"
             )
           div(class="form-group")
             button(
               type="submit"
               class="btn btn-primary"
-            ) Đăng nhập
-          a(href="/auth/register") Bạn chưa có tài khoản ? <br>
-          a(href="/auth/forgot-password") Quên mật khẩu
+            ) Gửi mã OTP
