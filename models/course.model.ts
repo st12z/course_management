@@ -15,6 +15,7 @@ const courseSchema = new mongoose.Schema(
       slug: "title",
       unique:true,
     },
+    price_special:Number,
     price:Number,
     participants:Number,
     duration:String,

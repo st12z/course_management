@@ -481,7 +481,7 @@ const fetchApiCourse = async (keyword) => {
 };
 const renderData = (data) => {
   const courseSuggest = data.courseSuggest;
-  if (data.courseSuggest.length > 0) {
+  if (courseSuggest.length > 0) {
     innerSuggest.classList.add("active");
     const HTML = courseSuggest.map((item) => {
       return `
@@ -519,6 +519,7 @@ const debounce = (callback, delay) => {
 if (formSearch) {
   const handleSearch = debounce(async (e) => {
     const keyword = e.target.value.trim();
+    console.log(keyword);
     if (keyword && keyword != "") {
       fetchApiCourse(keyword);
     } else {
@@ -526,6 +527,7 @@ if (formSearch) {
       innerSuggest.classList.remove("active");
     }
   }, 300);
+  console.log(inputSearch);
   inputSearch.addEventListener("keyup", handleSearch);
 }
 

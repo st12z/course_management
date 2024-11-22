@@ -1,23 +1,79 @@
 extends ../../layouts/default.pug
 include ../../mixins/box-head.pug
 block main
-  +box-head(pageTitle)
-  .container
+  .container.mt-3
+    .overlay
+      <div class="spinner-border" role="status">
+        <span class="sr-only">Đang tải...</span>
+      </div>
+    .overlay-search
     .row
-      each course in courseSuggest
-        .col-4.mb-3
-          .inner-course
-            <div class="card" style="width: 18rem;" detail-card>
-              .inner-image
-                img(src=course.thumbnail)
-                <span class="badge badge-danger" discount>Giảm #{course.discount}%</span>
-              .inner-content
-                <div class="card-body">
-                  <h5 class="card-title">#{course.title}</h5>
-                  p(class="card-text" priceOld) #{course.price.toLocaleString()} đ
-                  p(class="card-text" priceNew) #{course.price_special.toLocaleString()} đ
-                  <p class="card-text">!{course.description}</p>
-                  a(class="btn btn-primary" href=`/courses/detail/${course.slug}`) Xem chi tiết
-                </div>
-            </div>
+      .col-3
+        .inner-condition-list
+          .inner-condition-price
+            h5 Giá khóa học
+            div(class="form-group")
+              button(class="btn btn-outline-primary hidden" clear-price) Clear
+            div(class="form-group form-check")
+              input(
+                type="radio"
+                class="form-check-input"
+                id="price-1"
+                name="option-price"
+                value="1"
+              )
+              label(for="price-1" class="form-check-label form-check-inline") Khóa học dưới 1000k VNĐ
+            div(class="form-group form-check form-check-inline")
+              input(
+                type="radio"
+                class="form-check-input"
+                id="price-2"
+                name="option-price"
+                value="2"
+              )
+              label(for="price-2" class="form-check-label form-check-inline") Khóa học từ 1000k đến 1500k VNĐ
+            div(class="form-group form-check form-check-inline")
+              input(
+                type="radio"
+                class="form-check-input"
+                id="price-3"
+                name="option-price"
+                value="3"
+              )
+              label(for="price-3" class="form-check-label form-check-inline") Khóa học trên 2000k
+          .inner-condition-topic
+            h5 Danh mục
+            div(class="form-group")
+              button(class="btn btn-outline-primary hidden" clear-topic) Clear
+            each topic,index in topics
+              div(class="form-group form-check ")
+                input(
+                  type="radio"
+                  class="form-check-input"
+                  id=`ca-${index}`
+                  name="option-topic"
+                  value=topic.id
+                )
+                label(for=`ca-${index}` class="form-check-label form-check-inline") #{topic.title}
+
+      .col-9
+        .row.inner-all-course
+          each course in courseSuggest
+            .col-4.mb-3
+              a(href=`/courses/detail/${course.slug}`)
+                .inner-course
+                  <div class="card" style="width: 16rem;" detail-card>
+                    .inner-image
+                      img(src=course.thumbnail)
+                      <span class="badge badge-danger" discount>Giảm #{course.discount}%</span>
+                    .inner-content
+                      <div class="card-body">
+                        <h5 class="card-title">#{course.title}</h5>
+                        p(class="card-text" priceOld) #{course.price.toLocaleString()} đ
+                        p(class="card-text" priceNew) #{course.price_special.toLocaleString()} đ
+                      </div>
+                  </div>
+block script
+  script(src="/client/js/script.js")
+  script(src="/client/js/home.js")
         

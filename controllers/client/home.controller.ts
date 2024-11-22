@@ -9,8 +9,10 @@ export const index = async (req: Request, res: Response) => {
   for (const course of courseSuggest) {
     course["price_special"] = course["price"] * (1 - course["discount"] / 100);
   }
+  const topics=await Topic.find({deleted:false,status:"active"});
   res.render("client/pages/home/index", {
     pageTitle: "Trang chủ",
     courseSuggest: courseSuggest,
+    topics:topics
   });
 };

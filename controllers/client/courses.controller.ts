@@ -72,8 +72,8 @@ export const like = async (req: Request, res: Response) => {
   const access_token = req.cookies.access_token;
   if (!access_token) {
     res.json({
-      code:400,
-      messages:"Bạn cần đăng nhập!"
+      code: 400,
+      messages: "Bạn cần đăng nhập!",
     });
     return;
   }
@@ -105,8 +105,8 @@ export const unlike = async (req: Request, res: Response) => {
   const access_token = req.cookies.access_token;
   if (!access_token) {
     res.json({
-      code:400,
-      messages:"Bạn cần đăng nhập!"
+      code: 400,
+      messages: "Bạn cần đăng nhập!",
     });
     return;
   }
@@ -139,8 +139,8 @@ export const tym = async (req: Request, res: Response) => {
   const access_token = req.cookies.access_token;
   if (!access_token) {
     res.json({
-      code:400,
-      messages:"Bạn cần đăng nhập!"
+      code: 400,
+      messages: "Bạn cần đăng nhập!",
     });
     return;
   }
@@ -187,8 +187,8 @@ export const untym = async (req: Request, res: Response) => {
   const access_token = req.cookies.access_token;
   if (!access_token) {
     res.json({
-      code:400,
-      messages:"Bạn cần đăng nhập!"
+      code: 400,
+      messages: "Bạn cần đăng nhập!",
     });
     return;
   }
@@ -225,8 +225,8 @@ export const feedBackPost = async (req: Request, res: Response) => {
   const access_token = req.cookies.access_token;
   if (!access_token) {
     res.json({
-      code:400,
-      messages:"Bạn cần đăng nhập!"
+      code: 400,
+      messages: "Bạn cần đăng nhập!",
     });
     return;
   }
@@ -271,15 +271,15 @@ export const feedBackPost = async (req: Request, res: Response) => {
     infoUser: user,
     elapsedTime: elapsedTime,
     ratingAverage: ratingAvg,
-    avatar:user.avatar
+    avatar: user.avatar,
   });
 };
 export const likeFeed = async (req: Request, res: Response) => {
   const access_token = req.cookies.access_token;
   if (!access_token) {
     res.json({
-      code:400,
-      messages:"Bạn cần đăng nhập!"
+      code: 400,
+      messages: "Bạn cần đăng nhập!",
     });
     return;
   }
@@ -306,8 +306,8 @@ export const unlikeFeed = async (req: Request, res: Response) => {
   const access_token = req.cookies.access_token;
   if (!access_token) {
     res.json({
-      code:400,
-      messages:"Bạn cần đăng nhập!"
+      code: 400,
+      messages: "Bạn cần đăng nhập!",
     });
     return;
   }
@@ -335,31 +335,30 @@ export const deleteFeed = async (req: Request, res: Response) => {
   const feedBack = await FeedBack.findOne({
     _id: feedBackId,
   });
-  if(feedBack){
+  if (feedBack) {
     const courseId = feedBack.courseId;
-  await FeedBack.deleteOne({ _id: feedBackId });
-  const feedBacks = await FeedBack.find({
-    courseId: courseId,
-  });
-  let ratingAverage = 0;
-  if (feedBacks && feedBacks.length > 0) {
-    const sumRating = feedBacks.reduce((sum, item) => sum + item.rating, 0);
-    const countFeedBack = feedBacks.length;
-    ratingAverage = Math.round(sumRating / countFeedBack);
-  }
-  await Course.updateOne({ _id: courseId }, { rating: ratingAverage });
-  res.json({
-    code: 200,
-    messages: "Xóa thành công!",
-    feedBackId: feedBackId,
-    ratingAverage: ratingAverage,
-  });
-  }
-  else{
+    await FeedBack.deleteOne({ _id: feedBackId });
+    const feedBacks = await FeedBack.find({
+      courseId: courseId,
+    });
+    let ratingAverage = 0;
+    if (feedBacks && feedBacks.length > 0) {
+      const sumRating = feedBacks.reduce((sum, item) => sum + item.rating, 0);
+      const countFeedBack = feedBacks.length;
+      ratingAverage = Math.round(sumRating / countFeedBack);
+    }
+    await Course.updateOne({ _id: courseId }, { rating: ratingAverage });
     res.json({
-      code:401,
-      messages:"Không tìm thấy!"
-    })
+      code: 200,
+      messages: "Xóa thành công!",
+      feedBackId: feedBackId,
+      ratingAverage: ratingAverage,
+    });
+  } else {
+    res.json({
+      code: 401,
+      messages: "Không tìm thấy!",
+    });
   }
 };
 export const editFeed = async (req: Request, res: Response) => {
@@ -398,4 +397,53 @@ export const editFeed = async (req: Request, res: Response) => {
     feedBackId: feedBackId,
     ratingAverage: ratingAverage,
   });
+};
+const filterPrice = (courses: any[], price: Number) => {
+  let newCourses = [];
+  switch (price) {
+    case 1:
+      newCourses=courses.filter(course=>course["price_special"]<1000000);
+      break;
+    case 2:
+      newCourses=courses.filter(course=>course["price_special"]>=1000000 &&course["price_special"]<2000000);
+      break;
+    case 3:
+      newCourses=courses.filter(course=>course["price_special"]>=2000000);
+      break;
+    default:
+      break;
+  }
+  return newCourses;
+};
+export const filter = async (req: Request, res: Response) => {
+  const price = parseInt(`${req.query.price}`);
+  const topicId = req.query.topicId;
+  let courses = await Course.find({ deleted: false, status: "active" });
+  for (const course of courses) {
+    course["price_special"] = course["price"] * (1 - course["discount"] / 100);
+  }
+  // filter-price
+  if (price) {
+    courses=filterPrice(courses,price);
+  }
+  // end filter-price
+
+  // filter topicId
+  if (topicId) {
+    let newCourses = courses.filter(item=>item.topicId==topicId);
+    courses = newCourses;
+  }
+  // end filter topicId
+  try {
+    res.json({
+      code: 200,
+      courses: courses,
+      messages: "Lấy thành công data!",
+    });
+  } catch (error) {
+    res.status(500).json({
+      code: 500,
+      messages: "Lỗi bên server!",
+    });
+  }
 };
