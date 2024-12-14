@@ -6,18 +6,17 @@ block main
     .row
       each course in courses
         .col-4.mb-3
-          .inner-course
-            <div class="card" style="width: 18rem;" detail-card>
-              .inner-image
-                img(src=course.thumbnail)
-                <span class="badge badge-danger" discount>Giảm #{course.discount}%</span>
-              .inner-content
-                <div class="card-body">
-                  <h5 class="card-title">#{course.title}</h5>
-                  p(class="card-text" priceOld) #{course.price.toLocaleString()} đ
-                  p(class="card-text" priceNew) #{course.price_special.toLocaleString()} đ
-                  <p class="card-text">!{course.description}</p>
-                  a(class="btn btn-primary" href=`/courses/detail/${course.slug}`) Xem chi tiết
-                </div>
-            </div>
+          a(href=`/courses/detail/${course.slug}`)
+            .inner-course
+              <div class="card" style="width: 16rem;" detail-card>
+                .inner-image
+                  img(src=course.thumbnail)
+                  <span class="badge badge-danger" discount>Giảm #{course.discount}%</span>
+                .inner-content
+                  <div class="card-body">
+                    <h5 class="card-title">#{course.title}</h5>
+                    p(class="card-text" priceOld) #{course.price.toLocaleString()} đ
+                    p(class="card-text" priceNew) #{course.price_special.toLocaleString()} đ
+                  </div>
+              </div>
         

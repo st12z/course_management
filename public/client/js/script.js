@@ -460,7 +460,7 @@ const formSearch = document.querySelector("[form-search]");
 const innerSuggest = formSearch.querySelector(".inner-suggest");
 const inputSearch = formSearch.querySelector("input");
 const searchData = {};
-const fetchApiCourse = async (keyword) => {
+const fetchApiCourseSuggest = async (keyword) => {
   if (searchData[keyword]) {
     renderData(searchData[keyword]);
     return;
@@ -521,7 +521,7 @@ if (formSearch) {
     const keyword = e.target.value.trim();
     console.log(keyword);
     if (keyword && keyword != "") {
-      fetchApiCourse(keyword);
+      fetchApiCourseSuggest(keyword);
     } else {
       innerSuggest.innerHTML = "";
       innerSuggest.classList.remove("active");

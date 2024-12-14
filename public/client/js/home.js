@@ -60,13 +60,14 @@ const fetchApiCourse = async (filters) => {
     hiddenSpinner();
   }
 };
-const handdleClearButton = (clearButton, inputType) => {
+const handdleClearButton = (clearButton, inputType,keyword) => {
   if (clearButton) {
     clearButton.addEventListener("click", () => {
       inputType.forEach((input) => {
         input.checked = false;
       });
-      fetchApiCourse({});
+      filters[`${keyword}`]="";
+      fetchApiCourse(filters);
       clearButton.classList.add("hidden");
     });
   }
@@ -102,5 +103,5 @@ if (inputTopic) {
 }
 
 // end filter topicId
-handdleClearButton(clearButtonTopic, inputTopic);
-handdleClearButton(clearButtonPrice, inputPrice);
+handdleClearButton(clearButtonTopic, inputTopic,"topicId");
+handdleClearButton(clearButtonPrice, inputPrice,"price");
